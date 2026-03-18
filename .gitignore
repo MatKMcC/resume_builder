@@ -1,0 +1,11 @@
+**/.DS_Store
+**/.python-version
+**/.idea
+**/__pycache__
+**/resume.fls
+**/resume.log
+**/resume.synctex.gz
+**/resume.aux
+**/resume.fdb_latexmk
+**/*.egg-info
+**/out

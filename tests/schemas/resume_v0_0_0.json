@@ -1,0 +1,382 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://resume-builder.example.com/schemas/v0.0.0/resume.json",
+  "title": "Resume Schema v0.0.0",
+  "description": "JSON schema for resume data structure version 0.0.0",
+  "type": "object",
+  "required": [
+    "contact_info",
+    "professional_summary", 
+    "companies",
+    "achievements",
+    "education",
+    "hobbies",
+    "skills",
+    "metadata"
+  ],
+  "properties": {
+    "contact_info": {
+      "type": "object",
+      "description": "Personal contact information",
+      "required": ["name", "email"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Full name",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address",
+          "format": "email"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Phone number",
+          "format": "phone"
+        },
+        "location": {
+          "type": "string",
+          "description": "Home address"
+        },
+        "linkedin": {
+          "type": ["string", "null"],
+          "description": "LinkedIn profile URL or handle"
+        },
+        "website": {
+          "type": ["string", "null"],
+          "description": "Personal website URL",
+          "format": "uri"
+        },
+        "github": {
+          "type": ["string", "null"],
+          "description": "GitHub profile URL or handle"
+        }
+      },
+      "additionalProperties": false
+    },
+    "professional_summary": {
+      "type": "object",
+      "description": "Professional summary section",
+      "required": ["title", "content"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Section title",
+          "enum": ["Professional Summary"]
+        },
+        "content": {
+          "type": "string",
+          "description": "Main summary content",
+          "minLength": 50,
+          "maxLength": 2000
+        },
+        "tagline": {
+          "type": "string",
+          "description": "Career tagline or objective",
+          "maxLength": 200
+        },
+        "highlights": {
+          "type": "array",
+          "description": "Key highlight points",
+          "items": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 200
+          },
+          "minItems": 1,
+          "maxItems": 10
+        }
+      },
+      "additionalProperties": false
+    },
+    "companies": {
+      "type": "array",
+      "description": "Work experience entries",
+      "items": {
+        "type": "object",
+        "required": ["company", "title", "start_date", "location", "career"],
+        "properties": {
+          "company": {
+            "type": "string",
+            "description": "Company name",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "title": {
+            "type": "string",
+            "description": "Job title",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "start_date": {
+            "type": "string",
+            "description": "Start date in various formats",
+            "pattern": "^[A-Za-z]+ \\d{4}$|^\\d{4}-\\d{2}-\\d{2}$|^\\w+ \\d{4}$"
+          },
+          "end_date": {
+            "type": ["string", "null"],
+            "description": "End date in various formats",
+            "pattern": "^[A-Za-z]+ \\d{4}$|^\\d{4}-\\d{2}-\\d{2}$|^\\w+ \\d{4}$|^Present$|^Current$"
+          },
+          "location": {
+            "type": "string",
+            "description": "Work location",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "career": {
+            "type": "string",
+            "description": "Career track or department",
+            "minLength": 1,
+            "maxLength": 100
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "achievements": {
+      "type": "array",
+      "description": "Professional achievements and accomplishments",
+      "items": {
+        "type": "object",
+        "required": ["company", "content"],
+        "properties": {
+          "company": {
+            "type": "string",
+            "description": "Company where achievement occurred",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "content": {
+            "type": "string",
+            "description": "Description of achievement",
+            "minLength": 20,
+            "maxLength": 1000
+          },
+          "highlights": {
+            "type": "array",
+            "description": "Key highlights of the achievement",
+            "items": {
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 200
+            },
+            "minItems": 0,
+            "maxItems": 10
+          },
+          "key_achievement": {
+            "type": "string",
+            "description": "Summary of key achievement",
+            "maxLength": 300
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "education": {
+      "type": "array",
+      "description": "Educational background",
+      "items": {
+        "type": "object",
+        "required": ["degree", "institution", "year"],
+        "properties": {
+          "degree": {
+            "type": "string",
+            "description": "Degree name or certification",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "institution": {
+            "type": "string",
+            "description": "Educational institution name",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "year": {
+            "type": "string",
+            "description": "Year or year range",
+            "pattern": "^\\d{4}$|^\\d{4}-\\d{4}$"
+          },
+          "details": {
+            "type": ["string", "null"],
+            "description": "Additional details about education",
+            "maxLength": 500
+          },
+          "location": {
+            "type": ["string", "null"],
+            "description": "Location of institution",
+            "maxLength": 100
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "hobbies": {
+      "type": "array",
+      "description": "Personal interests and hobbies",
+      "items": {
+        "type": "object",
+        "required": ["title", "summary"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Hobby or interest title",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "summary": {
+            "type": "string",
+            "description": "Description of hobby or interest",
+            "minLength": 10,
+            "maxLength": 500
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "skills": {
+      "type": "object",
+      "description": "Professional and personal skills",
+      "required": ["technical", "soft", "certifications", "languages"],
+      "properties": {
+        "technical": {
+          "type": "object",
+          "description": "Technical skills organized by category",
+          "required": ["programming", "frameworks", "machinelearning", "databases", "cloud", "tools"],
+          "properties": {
+            "programming": {
+              "type": "array",
+              "description": "Programming languages",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 50
+              }
+            },
+            "frameworks": {
+              "type": "array",
+              "description": "Frameworks and methodologies",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              }
+            },
+            "machinelearning": {
+              "type": "array",
+              "description": "Machine learning tools and techniques",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              }
+            },
+            "databases": {
+              "type": "array",
+              "description": "Database and data management skills",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              }
+            },
+            "cloud": {
+              "type": "array",
+              "description": "Cloud platforms and services",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              }
+            },
+            "tools": {
+              "type": "array",
+              "description": "Development and productivity tools",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "soft": {
+          "type": "array",
+          "description": "Soft skills and personal qualities",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          }
+        },
+        "certifications": {
+          "type": "array",
+          "description": "Professional certifications",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          }
+        },
+        "languages": {
+          "type": "array",
+          "description": "Spoken languages",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Resume metadata and versioning information",
+      "required": ["version", "resume_id", "variant", "created"],
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "Resume schema version",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "enum": ["0.0.0"]
+        },
+        "resume_id": {
+          "type": "string",
+          "description": "Unique identifier for this resume",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "variant": {
+          "type": "string",
+          "description": "Resume variant or specialization",
+          "enum": ["general", "technical", "management", "startup", "enterprise", "healthcare", "fintech"]
+        },
+        "created": {
+          "type": "string",
+          "description": "Creation date",
+          "format": "date"
+        },
+        "job_id": {
+          "type": ["string", "null"],
+          "description": "Associated job application ID"
+        },
+        "job_url": {
+          "type": ["string", "null"],
+          "description": "Job posting URL",
+          "format": "uri"
+        },
+        "commit_id": {
+          "type": ["string", "null"],
+          "description": "Git commit ID for version tracking"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$comment": "This schema validates resume JSON files for version 0.0.0 of the resume builder system. It includes comprehensive validation rules for all fields including format validation, length constraints, and required fields."
+}

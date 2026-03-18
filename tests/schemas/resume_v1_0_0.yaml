@@ -1,0 +1,202 @@
+# YAML Schema for Resume v1.0.0 (JSON Schema equivalent)
+# Note: This is a documentation schema. For validation, use a YAML schema validator
+# or convert to JSON Schema format.
+
+$schema: "http://json-schema.org/draft-07/schema#"
+title: "Resume Schema v1.0.0"
+description: "Schema for structured resume data in YAML format v1.0.0 (stable production version)"
+type: object
+required:
+  - contact_info
+  - professional_summary  
+  - achievements
+
+properties:
+  contact_info:
+    type: object
+    required:
+      - name
+      - email
+    properties:
+      name:
+        type: string
+        minLength: 1
+      email:
+        type: string
+        format: email
+      phone:
+        type: [string, "null"]
+      location:
+        type: [string, "null"]
+      linkedin:
+        type: [string, "null"]
+      website:
+        type: [string, "null"]
+      github:
+        type: [string, "null"]
+
+  professional_summary:
+    type: object
+    required:
+      - content
+    properties:
+      title:
+        type: string
+      content:
+        type: string
+        minLength: 10
+      tagline:
+        type: [string, "null"]
+      highlights:
+        type: array
+        items:
+          type: string
+        description: "Key highlights (supported in YAML format)"
+
+  companies:
+    type: array
+    items:
+      type: object
+      required:
+        - company
+        - title
+        - start_date
+      properties:
+        company:
+          type: string
+        title:
+          type: string
+        start_date:
+          type: string
+        end_date:
+          type: [string, "null"]
+        location:
+          type: [string, "null"]
+        career:
+          type: [string, "null"]
+
+  achievements:
+    type: array
+    items:
+      type: object
+      required:
+        - company
+        - content
+      properties:
+        company:
+          type: string
+        content:
+          type: string
+          minLength: 10
+        key_achievement:
+          type: string
+          description: "Optional summary of main achievement"
+      additionalProperties: false
+      not:
+        required:
+          - highlights
+        description: "highlights field removed in v1.0.0 (inherited from v0.1.0)"
+
+  education:
+    type: array
+    items:
+      type: object
+      required:
+        - degree
+        - institution
+      properties:
+        degree:
+          type: string
+        institution:
+          type: string
+        graduation_date:
+          type: [string, "null"]
+        location:
+          type: [string, "null"]
+        gpa:
+          type: [number, "null"]
+        honors:
+          type: [string, "null"]
+
+  skills:
+    type: object
+    properties:
+      programming_languages:
+        type: array
+        items:
+          type: string
+      technologies:
+        type: array
+        items:
+          type: string
+      frameworks:
+        type: array
+        items:
+          type: string
+      databases:
+        type: array
+        items:
+          type: string
+      tools:
+        type: array
+        items:
+          type: string
+
+  certifications:
+    type: array
+    items:
+      type: object
+      required:
+        - name
+        - issuer
+      properties:
+        name:
+          type: string
+        issuer:
+          type: string
+        date:
+          type: [string, "null"]
+        expiry:
+          type: [string, "null"]
+        credential_id:
+          type: [string, "null"]
+
+  languages:
+    type: array
+    items:
+      type: string
+
+  metadata:
+    type: object
+    required:
+      - version
+      - format
+    properties:
+      version:
+        type: string
+        const: "1.0.0"
+      format:
+        type: string
+        const: "yaml"
+      resume_id:
+        type: string
+      variant:
+        type: string
+      created:
+        type: string
+      schema_url:
+        type: string
+        format: uri
+      job_id:
+        type: [string, "null"]
+      job_url:
+        type: [string, "null"]
+      commit_id:
+        type: [string, "null"]
+
+# YAML-specific features and benefits
+# - More readable than JSON
+# - Better support for multiline strings
+# - Comments allowed
+# - More compact syntax
+# - Human-friendly editing experience

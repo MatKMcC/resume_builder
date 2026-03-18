@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "resume-builder"
+version = "1.0.0"
+description = "A tool for building resumes with LaTeX templates from YAML/JSON data"
+
+dependencies = [
+    "jinja2>=3.0.0",
+    "pylatex>=1.4.2",
+    "pyyaml>=6.0",
+    "python-dotenv>=0.19.0",
+]
+
+[project.scripts]
+resume-builder = "resume_builder.resume_builder:main"
+resume-upgrader = "resume_builder.resume_upgrader:main"
+
+[tool.setuptools.package-data]
+resume_builder = ["templates/*"]

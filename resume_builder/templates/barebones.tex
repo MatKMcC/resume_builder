@@ -1,0 +1,122 @@
+%-------------------------
+% Resume in LaTeX - Classic Version
+% Author: Resume Builder Project
+% Barebones Resume Template
+% Created: June 2026
+%-------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+% Minimal packages for basic functionality
+\usepackage[margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+
+% Remove page numbering
+\pagestyle{empty}
+
+% Ensure PDF is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Simple Commands
+\newcommand{\sectionheader}[1]{\section*{#1}}
+\newcommand{\jobentry}[4]{\textbf{#1} \hfill #2 \\ \textit{#3} \hfill \textit{#4}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%----------NAME AND CONTACT INFO----------
+\begin{center}
+    {\LARGE \textbf{<< contact_info.name >>}} \\
+    \vspace{2pt}
+    << contact_info.phone >> $|$ << contact_info.email >> \\
+    << contact_info.linkedin >> $|$ << contact_info.github >>
+\end{center}
+
+\vspace{10pt}
+
+%-----------PROFESSIONAL SUMMARY-----------
+\sectionheader{Professional Summary}
+<% set ps = namespace(summary=professional_summary.content | latex_escape) %>
+<< ps.summary >>
+
+\vspace{10pt}
+
+%-----------TECHNICAL SKILLS-----------
+\sectionheader{Technical Skills}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Programming:} << skills.technical.programming|join(', ')|latex_escape >>
+    \item \textbf{Analytics Engineering:} << skills.technical.analytics_engineering|join(', ')|latex_escape >>
+    \item \textbf{Data Platforms:} << skills.technical.data_platforms|join(', ')|latex_escape >>
+    \item \textbf{Experimentation:} << skills.technical.experimentation|join(', ')|latex_escape >>
+    \item \textbf{Visualization:} << skills.technical.visualization|join(', ')|latex_escape >>
+    \item \textbf{Frameworks:} << skills.technical.frameworks|join(', ')|latex_escape >>
+\end{itemize}
+
+\vspace{10pt}
+
+%-----------KEY ACHIEVEMENTS-----------
+\sectionheader{Key Achievements}
+\begin{itemize}[leftmargin=*]
+<% for achieve in achievements %>
+  <% if achieve.key_achievement is defined %>
+    <% set ns = namespace(key_achievement=achieve.key_achievement | latex_escape) %>
+    \item << ns.key_achievement >>
+  <% endif %>
+<% endfor %>
+\end{itemize}
+
+\vspace{10pt}
+
+%-----------EXPERIENCE-----------
+\sectionheader{Professional Experience}
+
+<% for c in companies if c.career == "Data Science" %>
+\jobentry{<< c.company | latex_escape >>}{<< c.start_date >> -- << c.end_date >>}{<< c.title | latex_escape >>}{<< c.location | latex_escape >>}
+
+\begin{itemize}[leftmargin=*]
+<% for a in achievements %>
+  <% if c.company == a.company %>
+    <% set content = a.content | latex_escape %>
+    <% set ns = namespace(summary=content) %>
+    \item << ns.summary >>
+  <% endif %>
+<% endfor %>
+\end{itemize}
+
+\vspace{5pt}
+<% endfor %>
+
+%-----------ADDITIONAL EXPERIENCE-----------
+\sectionheader{Additional Professional Experience}
+
+<% for c in companies if c.career != "Data Science" %>
+\jobentry{<< c.company | latex_escape >>}{<< c.start_date >> -- << c.end_date >>}{<< c.title | latex_escape >>}{<< c.location | latex_escape >>}
+
+\begin{itemize}[leftmargin=*]
+<% for a in achievements %>
+  <% if c.company == a.company %>
+    <% set content = a.content | latex_escape %>
+    <% set ns = namespace(summary=content) %>
+    \item << ns.summary >>
+  <% endif %>
+<% endfor %>
+\end{itemize}
+
+\vspace{5pt}
+<% endfor %>
+
+%-----------EDUCATION-----------
+\sectionheader{Education \& Certifications}
+
+<% for degree in education %>
+\textbf{<< degree.institution | latex_escape >>} \hfill << degree.year >> \\
+\textit{<< degree.degree | latex_escape >>}
+
+\vspace{5pt}
+<% endfor %>
+
+\end{document}
