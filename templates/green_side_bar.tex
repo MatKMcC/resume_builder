@@ -1,0 +1,362 @@
+%-------------------------
+% Resume in LaTeX - POLISHED VERSION
+% Author: Matt K. McClelland
+% Enhanced with professional colors and typography
+% Based on: Sourabh Bajaj template + Custom styling
+% Polished: February 2025
+%-------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+% For layout
+\usepackage[margin=.4in]{geometry}
+\usepackage{fancyhdr}
+% \usepackage[empty]{fullpage}
+
+% Deining sections and section headers
+\usepackage{titlesec}
+
+% For two-column layout
+\usepackage{paracol} 
+
+% For background colors and styling
+\usepackage{eso-pic}
+\usepackage{tikz} 
+\input{glyphtounicode}
+% \usepackage[usenames,dvipsnames]{color}
+% \usepackage{xcolor}
+
+% Font Definitions
+% \usepackage{charter} % Professional font
+\usepackage[T1]{fontenc}
+\usepackage[sfdefault,thin]{roboto} % Light weight for body text
+\usepackage{setspace} % Adjust spacing to feel less cramped
+\setstretch{1.08} 
+% \usepackage{microtype}
+
+% sans-serif
+% \usepackage[sfdefault, thin]{FiraSans}
+% \usepackage[sfdefault]{roboto}
+% \usepackage[sfdefault,light]{noto-sans}
+% \usepackage[default]{sourcesanspro}
+
+% serif
+% \usepackage{CormorantGaramond}
+% \usepackage{charter}
+
+% Custom bullet, symbols, and hyperlinks
+\usepackage{pifont}
+\usepackage{marvosym}
+\usepackage{fontawesome5}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+
+% Enhanced hyperlink styling
+\hypersetup{
+    colorlinks=true,
+    linkcolor=mediumgray,
+    filecolor=mediumgray,      
+    urlcolor=mediumgray,
+    citecolor=mediumgray
+}
+
+
+%----------FONT OPTIONS----------
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+
+
+%----------MARGIN DEFINITIONS----------
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\raggedbottom
+\raggedright
+\addtolength{\oddsidemargin}{-0.2in}
+\setlength{\tabcolsep}{0in}
+% \addtolength{\evensidemargin}{1in}
+% \addtolength{\textwidth}{-.25in}
+% \addtolength{\topmargin}{-.7in}
+% \addtolength{\textheight}{1.4in}
+
+\urlstyle{same}
+
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+
+%-------------------------
+% Variable Settings
+\newcommand{\leftPanelWidth}{.35} % left column width
+\newcommand{\sectionSpacing}{\vspace{5pt}}
+
+
+%-------------------------
+% Two-column layout configuration
+\columnratio{\leftPanelWidth}  % Left column width
+\setlength{\columnsep}{.5in}  % Space between columns
+
+
+%-------------------------
+% Color definitions - Professional Tech Color Scheme
+\definecolor{primaryblue}{RGB}{0,51,102}      % Deep navy blue
+\definecolor{accentblue}{RGB}{0,102,153}      % Medium blue  
+\definecolor{lightblue}{RGB}{51,153,204}      % Light blue
+\definecolor{black}{RGB}{0,0,0}         % Professional gray
+\definecolor{darkgray}{RGB}{64,64,64}         % Professional gray
+\definecolor{mediumgray}{RGB}{96,96,96}       % Medium gray
+\definecolor{lightgray}{RGB}{128,128,128}     % Light gray
+\definecolor{successgreen}{RGB}{34,139,34}    % Success green for performance metrics
+\definecolor{leftpanelbg}{RGB}{72,140,104}    % Background color
+\definecolor{leftpaneltext}{RGB}{255,255,255} % Background text
+
+% Alternative color schemes (commented out - uncomment to try):
+% Modern Teal Scheme:
+% \definecolor{primaryblue}{RGB}{0,77,77}      % Dark teal
+% \definecolor{accentblue}{RGB}{0,128,128}     % Teal
+% \definecolor{lightblue}{RGB}{64,179,179}     % Light teal
+
+% Warm Professional Scheme:
+% \definecolor{primaryblue}{RGB}{102,51,0}     % Brown
+% \definecolor{accentblue}{RGB}{153,102,51}    % Light brown
+% \definecolor{lightblue}{RGB}{204,153,102}    % Tan
+
+
+%-------------------------
+% Custom commands - Enhanced with styling
+\newcommand{\medbold}[1]{{\fontseries{100}\selectfont #1}} % sb = SemiBold
+
+% Left column section formatting (smaller, more compact)
+\newcommand{\leftSection}[1]{
+  \section{\color{leftpaneltext}{#1}}
+}
+
+\newcommand{\leftPanelBackground}[1]{
+  \AddToShipoutPictureBG{
+    \begin{tikzpicture}[remember picture,overlay]
+      \fill[leftpanelbg] 
+        ([xshift=-.1in,yshift=0in]current page.south west) 
+        rectangle 
+        ([xshift=#1\paperwidth,yshift=0in]current page.north west);
+    \end{tikzpicture}
+  }
+}
+
+% Generic Item Building Functions (with color support)
+\newcommand{\listStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
+\newcommand{\listItem}[2]{\item{#2 {#1}}}
+\newcommand{\listEnd}{\end{itemize}}
+\newcommand{\genericListItem}[1]{\listItem{#1}{}}
+\newcommand{\actionListStart}{\begin{itemize}[leftmargin=0.1in, label={}]}
+\newcommand{\actionListItem}[1]{\listItem{#1}{\ding{43}}}
+
+% Enhanced highlight text color commands
+\newcommand{\positiveBolding}[1]{\medbold{\color{mediumgray}{#1}}}
+\newcommand{\positiveHighlighting}[1]{\medbold{\color{mediumgray}#1}}
+
+% Enhanced resume subheading with better typography and spacing
+\newcommand{\resumeSubheading}[4]{
+  \begin{tabular*}{\linewidth}[t]{l@{\extracolsep{\fill}}r}
+    \textbf{\color{mediumgray}{#1}} & \color{mediumgray}{#2} \\
+    \color{mediumgray}{#3} & \color{mediumgray}{#4} \\
+  \end{tabular*}
+  \vspace{-8pt}
+}
+
+% Custom command for enhanced contact info
+\newcommand{\contactItem}[2]{%
+  \textcolor{leftpaneltext}{#1}\ \textcolor{leftpaneltext}{#2}
+}
+
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\pagecolor{white}
+
+
+% %----------ENHANCED HEADING----------
+% \begin{center}
+% \end{center}
+
+
+%----------BEGIN TWO-COLUMN LAYOUT----------
+\begin{paracol}{2}
+
+\leftPanelBackground{\leftPanelWidth}
+\titleformat{\section}{\vspace{-4pt}\raggedright\large\bfseries\color{leftpaneltext}}{}{0em}{}[\titlerule\vspace{-5pt}]
+
+% \setlength{\columnseprule}{1pt}  % Shows the column boundary
+
+
+%==========LEFT COLUMN==========
+
+% Name with enhanced styling
+\color{leftpaneltext}{\Huge\scshape\medbold{<< contact_info.name >>}} \\
+<< professional_summary.tagline >>
+
+\sectionSpacing
+
+
+%-----------PERSONAL INFORMATION-----------
+\leftSection{Personal Information}
+% Contact information with icons and color - cleaned up layout
+\small 
+\contactItem{\faPhone}{<< contact_info.phone >>} \\
+\contactItem{\faEnvelope}{\href{mailto:<< contact_info.email >>}{\textcolor{leftpaneltext}{<< contact_info.email >>}}} \\
+\contactItem{\faLinkedin}{\href{<< contact_info.linkedin >>}{\textcolor{leftpaneltext}{<< contact_info.linkedin >>}}} \\
+\contactItem{\faGithub}{\href{<< contact_info.github >>}{\textcolor{leftpaneltext}{<< contact_info.github >>}}}
+\sectionSpacing
+
+
+%-----------TECHNICAL SKILLS-----------
+\leftSection{Technical Skills}
+  \listStart
+    \genericListItem{\medbold{Programming:} << skills.technical.programming|join(', ')|latex_escape >>}
+    \genericListItem{\medbold{Analytics Engineering:} << skills.technical.analytics_engineering|join(', ')|latex_escape >>}
+    \genericListItem{\medbold{Data Platform:} << skills.technical.data_platforms|join(', ')|latex_escape >>}
+    \genericListItem{\medbold{Experimentation:} << skills.technical.experimentation|join(', ')|latex_escape >>}
+    \genericListItem{\medbold{Visualization:} << skills.technical.visualization|join(', ')|latex_escape >>}
+    \genericListItem{\medbold{Frameworks:} << skills.technical.frameworks|join(', ')|latex_escape >>}
+  \listEnd
+
+\sectionSpacing
+
+
+%-----------KEY ACHIEVEMENTS-----------
+\leftSection{Key Achievements}
+  \listStart
+   <% for achieve in achievements %>
+    <% if achieve.key_achievement is defined %>
+      <% set ns = namespace(key_achievement=achieve.key_achievement | latex_escape) %>
+      <% for highlight in achieve.highlights %>
+        <% set hl = highlight | latex_escape %>
+        <% set ns.key_achievement = ns.key_achievement | replace(hl, "\medbold{" + hl + "}") %>
+      <% endfor %>
+      \genericListItem{ << ns.key_achievement >> }
+     <% endif %>
+   <% endfor %>
+  \listEnd
+\sectionSpacing
+
+
+%-----------EDUCATION AND CERTIFICATIONS-----------
+\leftSection{Education \& Certifications}
+  \listStart
+   <% for degree in education %>
+     \genericListItem{\medbold{ << degree.institution >> } { << degree.year >> } \\ 
+     \textit{ << degree.degree >> }}
+   <% endfor %>
+  \listEnd
+\sectionSpacing
+
+
+%-----------PROJECTS AND PASSIONS-----------
+\leftSection{Interest \& Hobbies}
+  \listStart
+   <% for hobby in hobbies %>
+    \genericListItem{\medbold{<< hobby.title >>:} << hobby.summary >>}
+   <% endfor %>
+  \listEnd
+
+\switchcolumn
+
+
+%==========RIGHT COLUMN==========
+
+\titleformat{\section}{\vspace{-4pt}\raggedright\large\bfseries\color{darkgray}}{}{0em}{}[\titlerule\vspace{-5pt}]
+
+
+%-----------PROFESSIONAL SUMMARY-----------
+\section{Professional Summary}
+
+<# Updates Professional Summary information with highlights (note this requires exact match in JSON) #>
+<% set ps = namespace(summary=professional_summary.content | latex_escape) %>
+<% for highlight in professional_summary.highlights %>
+    <% set h = highlight | latex_escape %>
+    <% set ps.summary = ps.summary | replace(h, "\positiveBolding{" + h + "}") %>
+<% endfor %>
+
+\small\color{darkgray}{<< ps.summary >>}
+\sectionSpacing
+
+%-----------EXPERIENCE-----------
+\section{Professional Experience}
+
+<% for c in companies if c.career == "Data Science" %>
+\resumeSubheading
+  {<< c.company | latex_escape >>}
+  {<< c.start_date >> -- << c.end_date >>}
+  {<< c.title | latex_escape >>}
+  {<< c.location | latex_escape >>}
+
+  \actionListStart
+
+  <% for a in achievements %>
+    <% if c.company == a.company %>
+
+      <% set content = a.content | latex_escape %>
+      <% set ns = namespace(summary=content) %>
+      <% for highlight in a.highlights %>
+          <% set h = highlight | latex_escape %>
+          <% set ns.summary = ns.summary | replace(h, "\positiveBolding{" + h + "}") %>
+      <% endfor %>
+
+      \actionListItem{<< ns.summary >>}
+
+    <% endif %>
+  <% endfor %>
+  \listEnd
+  \sectionSpacing
+<% endfor %>
+\sectionSpacing
+
+
+%-----------ADDITIONAL EXPERIENCE-----------
+\section{Additional Professional Experience}
+
+<% for c in companies if c.career != "Data Science" %>
+\resumeSubheading
+  {<< c.company | latex_escape >>}
+  {<< c.start_date >> -- << c.end_date >>}
+  {<< c.title | latex_escape >>}
+  {<< c.location >>}
+
+  \actionListStart
+
+  <% for a in achievements %>
+    <% if c.company == a.company %>
+
+      <% set content = a.content | latex_escape %>
+      <% set ns = namespace(summary=content) %>
+      <% for highlight in a.highlights %>
+          <% set h = highlight | latex_escape %>
+          <% set ns.summary = ns.summary | replace(h, "\positiveBolding{" + h + "}") %>
+      <% endfor %>
+
+      \actionListItem{<< ns.summary >>}
+
+    <% endif %>
+  <% endfor %>
+  \listEnd
+  \sectionSpacing
+<% endfor %>
+\sectionSpacing
+
+
+%----------END TWO-COLUMN LAYOUT----------
+\end{paracol}
+
+
+%----------FOOTER WITH SUBTLE BRANDING----------
+\vfill
+\begin{center}
+    \scriptsize\color{lightgray}
+    Resume generated with \LaTeX\ • Updated February 2025
+\end{center}
+
+\end{document}

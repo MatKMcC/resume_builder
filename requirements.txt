@@ -1,0 +1,15 @@
+# Resume Builder Requirements
+
+# PDF processing (choose one)
+pdfplumber>=0.7.0     # Recommended - better text extraction
+PyPDF2>=3.0.0         # Alternative - lighter weight
+
+# Templating
+jinja2>=3.0.0         # For advanced templating
+
+# Environment and API
+python-dotenv>=0.19.0 # For environment variables
+anthropic>=0.3.0      # For AI parsing (optional)
+
+# Latex
+pylatex>=1.4.2
