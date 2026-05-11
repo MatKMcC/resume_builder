@@ -1,4 +1,4 @@
-# Resume Builder TODO
+ # Resume Builder TODO
 
 ## Current Sprint (March 30 - April 3, 2026)
 
@@ -8,15 +8,18 @@
 - [ ] Add resume versions control to resume_builder 📅 2026-04-03 #versioning 
 - [ ] Add function to update resumes to newer versions 📅 2026-04-03 #versioning 
 - [ ] Set up a github repository for resume and versions 📅 2026-04-03 #git #workflow 
+- [ ] Add resume versions control to resumes 📅 2026-04-03 #versioning 
 - [ ] Update resumes to YAML files not JSON files 📅 2026-04-03 #yaml
+- [ ]  Remove highlights sections in the resumes to improve functionality / readability 📅 🔼  #resume
 - [ ] Set up friction analysis framework real job applications 📅 2026-04-03 #job-applications #user-research
 - [ ] Test resume and template compatibility 📅 2026-04-03 #testing #python
-- [ ] Set up monitoring to make sure no PII is leaked in resume / resume history #pii #testing #python
+- [ ] Set up monitoring to make sure no PII is leaked in resume / resume history 2026-04-03 #pii #testing #python
 ## Goals
 
 ### Resume Compatibility
 - [ ] Backward compatible with older resumes for rebuilds
 - [ ] Functionality to update older resumes to new formats
+- [ ] Integrate resume into a UI
 
 ### Template Compatibility
 - [ ] Templates should be compatible with specified resume versions

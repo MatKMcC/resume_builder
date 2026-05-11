@@ -2,6 +2,15 @@
 
 A function to apply different resume formats to a standardized resume using LaTex and Jinja2 templates.
 
+## Notes / Ramblings
+- ### Setting up New Job Posting
+	- This is difficult and manual -- the process is to 1/ Create the folder 2/ download the posting 3/ git clone the resume repo 4/ ask AI to review and update resume to fit the posting 4/ review AIs work 5/ add additional information necessary for applications
+- Pain Points
+	- Creating the repository is rote and tedious work. Could be fully automated
+	- AI reviews and updates are hard to find and often too agressive
+	- Information saving / review / updates are manual and confusing. No way to review and see what works
+	- highlights doesn't work very well. We can remove that.
+
 ## Current Status
 - **Phase:** MVP Development
 - **Progress:** Initial templating complete, working on resume formatting and tracking, and end to end testing
