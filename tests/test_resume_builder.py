@@ -10,12 +10,12 @@ These tests validate the complete workflow:
 
 import pytest
 import json
+import yaml
 from pathlib import Path
 import tempfile
 import shutil
 import difflib
 import sys
-import os
 
 # Add project root to path so we can import the resume builder
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -33,7 +33,7 @@ class TestEndToEndResumeGeneration:
         return Jinja2ResumeBuilder()
     
     @pytest.fixture
-    def test_resume_data(self):
+    def test_resume_data(self, resume_builder):
         """Load the test resume data (v0.0.0 format)."""
         # We'll use the existing test data, but you mentioned schema file
         # Let's use the actual resume data instead
@@ -41,9 +41,8 @@ class TestEndToEndResumeGeneration:
         
         if not test_resume_path.exists():
             pytest.skip(f"Test resume data not found at {test_resume_path}")
-        
-        with open(test_resume_path, 'r') as f:
-            return json.load(f)
+
+        return resume_builder.load_resume_data(test_resume_path)
     
     @pytest.fixture
     def temp_output_dir(self):
@@ -56,72 +55,50 @@ class TestEndToEndResumeGeneration:
     @pytest.fixture
     def expected_output_path(self):
         """Path to expected LaTeX output file."""
-        return Path(__file__).parent / "expected_outputs" / "resume_v0_0_0_green_side_bar.tex"
-
-    def test_complete_workflow_green_sidebar_template(self, resume_builder, test_resume_data, temp_output_dir, expected_output_path):
-        """
-        Test the complete end-to-end workflow:
-        1. Load resume data from JSON
-        2. Generate LaTeX using green_side_bar template
-        3. Compare against expected output
-        """
-        # Step 1: Load resume data into builder
-        # Instead of loading from file, we'll load from our test data directly
-        resume_builder.resume_data = test_resume_data
-        
-        # Step 2: Generate LaTeX content using the template
-        template_name = "green_side_bar.tex"
-        latex_output = resume_builder.generate_latex(template_name)
-        
-        # Step 3: Verify LaTeX was generated successfully
-        assert latex_output is not None, "Failed to generate LaTeX output"
-        assert len(latex_output) > 0, "Generated LaTeX is empty"
-        
-        # Step 4: Save the generated output for comparison
-        actual_output_path = temp_output_dir / "actual_resume_output.tex"
-        with open(actual_output_path, 'w', encoding='utf-8') as f:
-            f.write(latex_output)
-        
-        # Step 5: Compare against expected output (if it exists)
-        if expected_output_path.exists():
-            self._compare_latex_outputs(expected_output_path, actual_output_path)
-        else:
-            # If no expected output exists, we'll create it in the next step
-            pytest.skip(f"Expected output not found at {expected_output_path}. "
-                       f"Generated output saved to {actual_output_path} for review.")
+        return Path(__file__).parent / "expected_outputs" / "green_side_bar.tex"
     
-    def _compare_latex_outputs(self, expected_path: Path, actual_path: Path):
+    def test_compare_latex_outputs_integration(self, resume_builder, test_resume_data, temp_output_dir, expected_output_path):
         """
-        Compare expected and actual LaTeX outputs with intelligent diffing.
+        Integration test that compares generated LaTeX with expected output.
         
-        This helper method shows you how to do content comparison for tests.
+        This test validates that our LaTeX generation produces consistent results.
         """
-        with open(expected_path, 'r', encoding='utf-8') as f:
-            expected_content = f.read()
-        
-        with open(actual_path, 'r', encoding='utf-8') as f:
-            actual_content = f.read()
-        
+        # Generate LaTeX using resume builder
+        resume_builder.resume_data = test_resume_data
+        generated_output = resume_builder.generate_latex("green_side_bar.tex")
+        assert generated_output is not None, "Failed to generate LaTeX output"
+
+        # Step 4: Save the generated output for comparison
+        generated_output_path = temp_output_dir / "generated_resume_output.tex"
+        with open(generated_output_path, 'w', encoding='utf-8') as f:
+            f.write(generated_output)
+
+        # Load expected output files
+        if not expected_output_path.exists():
+            pytest.fail(f"Expected output file missing: {expected_output_path}. "
+                       f"Run 'python tests/test_resume_builder.py' to generate it first.")
+        with open(expected_output_path, 'r', encoding='utf-8') as f:
+            expected_output = f.read()
+
+        # Compare created LaTeX file with the expected output
         # Normalize whitespace for comparison (LaTeX is sensitive but we can be flexible)
-        expected_lines = [line.strip() for line in expected_content.split('\n') if line.strip()]
-        actual_lines = [line.strip() for line in actual_content.split('\n') if line.strip()]
-        
+        generated_lines = [line.strip() for line in generated_output.split('\n') if line.strip()]
+        expected_lines = [line.strip() for line in expected_output.split('\n') if line.strip()]
+
         # Create detailed diff if there are differences
-        if expected_lines != actual_lines:
+        if expected_lines != generated_lines:
             diff = difflib.unified_diff(
                 expected_lines,
-                actual_lines,
-                fromfile=str(expected_path),
-                tofile=str(actual_path),
+                generated_lines,
                 lineterm=''
             )
             diff_text = '\n'.join(diff)
-            
+
             # Show a helpful error message
             pytest.fail(
                 f"Generated LaTeX does not match expected output!\n"
-                f"Expected file: {expected_path}\n"
-                f"Actual file: {actual_path}\n\n"
+                f"Expected file: {expected_output_path}\n"
+                f"Generated file: {generated_output_path}\n\n"
                 f"Differences:\n{diff_text}"
             )
     
@@ -232,7 +209,7 @@ def create_expected_output_helper():
     expected_output_dir = Path(__file__).parent / "expected_outputs"
     expected_output_dir.mkdir(exist_ok=True)
     
-    expected_output_path = expected_output_dir / "resume_v0_0_0_green_side_bar.tex"
+    expected_output_path = expected_output_dir / "green_side_bar.tex"
     with open(expected_output_path, 'w', encoding='utf-8') as f:
         f.write(latex_output)
     
