@@ -7,3 +7,4 @@
 **/resume.synctex.gz
 **/resume.aux
 **/resume.fdb_latexmk
+**/*.egg-info

@@ -235,9 +235,7 @@ class ResumeUpgrader:
         logger.info(f"Upgraded resume saved to: {output_path}")
         return output_path
 
-
-if __name__ == '__main__':
-
+def main():
     # add arguments
     parser = argparse.ArgumentParser(description='Upgrade resume files to newer schema versions')
     parser.add_argument('input_file', help='Path to input resume file (JSON or YAML)')
@@ -260,3 +258,6 @@ if __name__ == '__main__':
 
     except Exception as e:
         logger.error(f"Failed to upgrade resume: {e}")
+
+if __name__ == '__main__':
+    main()

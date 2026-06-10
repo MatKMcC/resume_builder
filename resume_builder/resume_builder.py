@@ -25,8 +25,12 @@ logger = logging.getLogger(__name__)
 class Jinja2ResumeBuilder:
     def __init__(self):
         # Set up Jinja2 environment with LaTeX-compatible delimiters
+
+        package_dir = Path(__file__).parent
+        templates_dirs = [str(package_dir / 'templates')]
+
         self.jinja_env = Environment(
-            loader=FileSystemLoader(['templates']),
+            loader=FileSystemLoader(templates_dirs),
             # LaTeX uses { } heavily, so we use different delimiters
             variable_start_string='<<',
             variable_end_string='>>',
