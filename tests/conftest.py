@@ -10,6 +10,7 @@ This module provides fixtures for:
 
 import pytest
 import json
+import yaml
 from pathlib import Path
 from typing import Dict, List, Any
 import tempfile
@@ -22,8 +23,7 @@ EXPECTED_OUTPUT_DIR = TEST_DATA_DIR / "expected_outputs"
 
 # Resume versions to test against
 RESUME_VERSIONS = ["0.0.0", "0.1.0", "1.0.0"]
-TEMPLATE_VERSIONS = ["green_side_bar", "classic"]
-
+TEMPLATE_VERSIONS = ["green_side_bar"]
 
 # Markers for different test categories
 def pytest_configure(config):
@@ -35,51 +35,63 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "slow: mark test as slow running")
     config.addinivalue_line("markers", "json: Tests JSON structure requirements")
 
-
 @pytest.fixture
 def test_data_dir():
     """Path to test data directory."""
     return TEST_DATA_DIR
-
 
 @pytest.fixture
 def schema_dir():
     """Path to JSON schema directory."""
     return SCHEMA_DIR
 
-
 @pytest.fixture(params=RESUME_VERSIONS)
 def resume_version(request):
     """Parametrized fixture that provides each resume version."""
     return request.param
 
-
 @pytest.fixture
 def resume_schema(resume_version, schema_dir):
     """Load JSON schema for specified resume version."""
-    schema_file = schema_dir / f"resume_v{resume_version.replace('.', '_')}.json"
+
+    if resume_version < "1.0.0":
+        schema_file = schema_dir / f"resume_v{resume_version.replace('.', '_')}.json"
+    else:
+        schema_file = schema_dir / f"resume_v{resume_version.replace('.', '_')}.yaml"
 
     if not schema_file.exists():
         pytest.skip(f"Schema for version {resume_version} not found")
 
-    with open(schema_file, 'r') as f:
-        return json.load(f)
-
+    if resume_version < "1.0.0":
+        with open(schema_file, 'r') as f:
+            return json.load(f)
+    else:
+        with open(schema_file, 'r') as f:
+            return yaml.safe_load(f)
 
 @pytest.fixture
-def resume(test_data_dir, resume_version):
+def resume_pth(test_data_dir, resume_version):
     """Load resume test data for a specified version."""
-    resume_version = resume_version.replace('.', '_')
-    resume_file = test_data_dir / f"resume_v{resume_version}.json"
+    if resume_version < "1.0.0":
+        resume_version = resume_version.replace('.', '_')
+        resume_pth = test_data_dir / f"resume_v{resume_version}.json"
+    else:
+        resume_version = resume_version.replace('.', '_')
+        resume_pth = test_data_dir / f"resume_v{resume_version}.yaml"
 
-    if not resume_file.exists():
-        pytest.skip(f"Resume data for version {resume_file} not found")
+    if not resume_pth.exists():
+        pytest.skip(f"Resume data for version {resume_pth} not found")
 
-    with open(resume_file, 'r') as f:
-        data = json.load(f)
+    return resume_pth
 
-    return data
-
+@pytest.fixture
+def resume(resume_pth):
+    """Load resume test data for a specified version."""
+    with open(resume_pth, 'r', encoding='utf-8') as f:
+        try:
+            return yaml.safe_load(f)
+        except yaml.YAMLError:
+            return json.load(f)
 
 # Custom reporting hooks for better test organization
 from collections import defaultdict

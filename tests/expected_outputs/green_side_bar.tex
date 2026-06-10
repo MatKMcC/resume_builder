@@ -1,0 +1,471 @@
+%-------------------------
+% Resume in LaTeX - POLISHED VERSION
+% Author: Matt K. McClelland
+% Enhanced with professional colors and typography
+% Based on: Sourabh Bajaj template + Custom styling
+% Polished: February 2025
+%-------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+% For layout
+\usepackage[margin=.4in]{geometry}
+\usepackage{fancyhdr}
+% \usepackage[empty]{fullpage}
+
+% Deining sections and section headers
+\usepackage{titlesec}
+
+% For two-column layout
+\usepackage{paracol}
+
+% For background colors and styling
+\usepackage{eso-pic}
+\usepackage{tikz} 
+\input{glyphtounicode}
+% \usepackage[usenames,dvipsnames]{color}
+% \usepackage{xcolor}
+
+% Font Definitions
+% \usepackage{charter} % Professional font
+\usepackage[T1]{fontenc}
+\usepackage[sfdefault,thin]{roboto} % Light weight for body text
+\usepackage{setspace} % Adjust spacing to feel less cramped
+\setstretch{1.08} 
+% \usepackage{microtype}
+
+% sans-serif
+% \usepackage[sfdefault, thin]{FiraSans}
+% \usepackage[sfdefault]{roboto}
+% \usepackage[sfdefault,light]{noto-sans}
+% \usepackage[default]{sourcesanspro}
+
+% serif
+% \usepackage{CormorantGaramond}
+% \usepackage{charter}
+
+% Custom bullet, symbols, and hyperlinks
+\usepackage{pifont}
+\usepackage{marvosym}
+\usepackage{fontawesome5}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+
+% Enhanced hyperlink styling
+\hypersetup{
+    colorlinks=true,
+    linkcolor=mediumgray,
+    filecolor=mediumgray,      
+    urlcolor=mediumgray,
+    citecolor=mediumgray
+}
+
+
+%----------FONT OPTIONS----------
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+
+
+%----------MARGIN DEFINITIONS----------
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\raggedbottom
+\raggedright
+\addtolength{\oddsidemargin}{-0.2in}
+\setlength{\tabcolsep}{0in}
+% \addtolength{\evensidemargin}{1in}
+% \addtolength{\textwidth}{-.25in}
+% \addtolength{\topmargin}{-.7in}
+% \addtolength{\textheight}{1.4in}
+\urlstyle{same}
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+
+%-------------------------
+% Variable Settings
+\newcommand{\leftPanelWidth}{.35} % left column width
+\newcommand{\sectionSpacing}{\vspace{5pt}}
+
+
+%-------------------------
+% Two-column layout configuration
+\columnratio{\leftPanelWidth}  % Left column width
+\setlength{\columnsep}{.5in}  % Space between columns
+
+
+%-------------------------
+% Color definitions - Professional Tech Color Scheme
+\definecolor{primaryblue}{RGB}{0,51,102}      % Deep navy blue
+\definecolor{accentblue}{RGB}{0,102,153}      % Medium blue  
+\definecolor{lightblue}{RGB}{51,153,204}      % Light blue
+\definecolor{black}{RGB}{0,0,0}         % Professional gray
+\definecolor{darkgray}{RGB}{64,64,64}         % Professional gray
+\definecolor{mediumgray}{RGB}{96,96,96}       % Medium gray
+\definecolor{lightgray}{RGB}{128,128,128}     % Light gray
+\definecolor{successgreen}{RGB}{34,139,34}    % Success green for performance metrics
+\definecolor{leftpanelbg}{RGB}{72,140,104}    % Background color
+\definecolor{leftpaneltext}{RGB}{255,255,255} % Background text
+
+% Alternative color schemes (commented out - uncomment to try):
+% Modern Teal Scheme:
+% \definecolor{primaryblue}{RGB}{0,77,77}      % Dark teal
+% \definecolor{accentblue}{RGB}{0,128,128}     % Teal
+% \definecolor{lightblue}{RGB}{64,179,179}     % Light teal
+
+% Warm Professional Scheme:
+% \definecolor{primaryblue}{RGB}{102,51,0}     % Brown
+% \definecolor{accentblue}{RGB}{153,102,51}    % Light brown
+% \definecolor{lightblue}{RGB}{204,153,102}    % Tan
+
+
+%-------------------------
+
+% Custom commands - Enhanced with styling
+\newcommand{\medbold}[1]{{\fontseries{100}\selectfont #1}} % sb = SemiBold
+
+% Left column section formatting (smaller, more compact)
+\newcommand{\leftSection}[1]{
+  \section{\color{leftpaneltext}{#1}}
+}
+
+\newcommand{\leftPanelBackground}[1]{
+  \AddToShipoutPictureBG{
+    \begin{tikzpicture}[remember picture,overlay]
+      \fill[leftpanelbg] 
+        ([xshift=-.1in,yshift=0in]current page.south west) 
+        rectangle 
+        ([xshift=#1\paperwidth,yshift=0in]current page.north west);
+    \end{tikzpicture}
+  }
+}
+
+% Generic Item Building Functions (with color support)
+\newcommand{\listStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
+\newcommand{\listItem}[2]{\item{#2 {#1}}}
+\newcommand{\listEnd}{\end{itemize}}
+\newcommand{\genericListItem}[1]{\listItem{#1}{}}
+\newcommand{\actionListStart}{\begin{itemize}[leftmargin=0.1in, label={}]}
+\newcommand{\actionListItem}[1]{\listItem{#1}{\ding{43}}}
+
+% Enhanced highlight text color commands
+\newcommand{\positiveBolding}[1]{\medbold{\color{mediumgray}{#1}}}
+\newcommand{\positiveHighlighting}[1]{\medbold{\color{mediumgray}#1}}
+
+% Enhanced resume subheading with better typography and spacing
+\newcommand{\resumeSubheading}[4]{
+  \begin{tabular*}{\linewidth}[t]{l@{\extracolsep{\fill}}r}
+    \textbf{\color{mediumgray}{#1}} & \color{mediumgray}{#2} \\
+    \color{mediumgray}{#3} & \color{mediumgray}{#4} \\
+  \end{tabular*}
+  \vspace{-8pt}
+}
+
+% Custom command for enhanced contact info
+\newcommand{\contactItem}[2]{%
+  \textcolor{leftpaneltext}{#1}\ \textcolor{leftpaneltext}{#2}
+}
+
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\pagecolor{white}
+
+
+% %----------ENHANCED HEADING----------
+% \begin{center}
+% \end{center}
+
+
+%----------BEGIN TWO-COLUMN LAYOUT----------
+\begin{paracol}{2}
+\leftPanelBackground{\leftPanelWidth}
+\titleformat{\section}{\vspace{-4pt}\raggedright\large\bfseries\color{leftpaneltext}}{}{0em}{}[\titlerule\vspace{-5pt}]
+% \setlength{\columnseprule}{1pt}  % Shows the column boundary
+
+
+%==========LEFT COLUMN==========
+% Name with enhanced styling
+\color{leftpaneltext}{\Huge\scshape\medbold{Merlin the Turqouise}} \\
+Seeking senior-level opportunities in AI/ML sorcery and mystical product analytics
+\sectionSpacing
+
+
+%-----------PERSONAL INFORMATION-----------
+\leftSection{Personal Information}
+
+% Contact information with icons and color - cleaned up layout
+\small 
+\contactItem{\faPhone}{(666) 666-6174} \\
+\contactItem{\faEnvelope}{\href{mailto:merlin.t.turqouise@fakemail.com}{\textcolor{leftpaneltext}{merlin.t.turqouise@fakemail.com}}} \\
+\contactItem{\faLinkedin}{\href{linkedin.com/in/merlin-t-turquise-wizard}{\textcolor{leftpaneltext}{linkedin.com/in/merlin-t-turquise-wizard}}} \\
+\contactItem{\faGithub}{\href{github.com/merlins-big-book-of-spells}{\textcolor{leftpaneltext}{github.com/merlins-big-book-of-spells}}}
+\sectionSpacing
+
+
+%-----------TECHNICAL SKILLS-----------
+\leftSection{Technical Skills}
+  \listStart
+    \genericListItem{\medbold{Programming:} Python (Parseltongue variant), Runes, SQL (Spell Query Language), Spark (Lightning Magic)}
+    \genericListItem{\medbold{Analytics Engineering:} }
+    \genericListItem{\medbold{Data Platform:} }
+    \genericListItem{\medbold{Experimentation:} }
+    \genericListItem{\medbold{Visualization:} }
+    \genericListItem{\medbold{Frameworks:} ETL/ELT (Extract Transform Load/Enchant Transform Levitate)}
+  \listEnd
+\sectionSpacing
+
+
+%-----------KEY ACHIEVEMENTS-----------
+\leftSection{Key Achievements}
+  \listStart
+   
+    
+      
+      \genericListItem{ Processed and deduplicated 600+ million mystical contact profiles to clean up enchanted directories }
+     
+   
+    
+   
+    
+   
+    
+      
+      \genericListItem{ Successfully implemented enterprise and realm wide solutions and processes supporting 200+ data sorcerers }
+     
+   
+    
+      
+      \genericListItem{ Successfully deployed anti{-}curse protection for magical messaging system }
+     
+   
+    
+      
+      \genericListItem{ Improved healing prediction accuracy by 15\% using advanced crystal ball techniques }
+     
+   
+    
+   
+    
+   
+    
+   
+    
+   
+    
+   
+  \listEnd
+\sectionSpacing
+
+
+%-----------EDUCATION AND CERTIFICATIONS-----------
+\leftSection{Education \& Certifications}
+  \listStart
+   
+     \genericListItem{\medbold{ Magic Max's School for Dummies } { 2025 } \\ 
+     \textit{ Certificate in Magical Learning Operations (MLOPS) }}
+   
+     \genericListItem{\medbold{ Durmstrung Institute } { 1254-1258 } \\ 
+     \textit{ Mage of Theoretical Dark Arts }}
+   
+  \listEnd
+\sectionSpacing
+
+
+%-----------PROJECTS AND PASSIONS-----------
+\leftSection{Interest \& Hobbies}
+  \listStart
+   
+    \genericListItem{\medbold{WLAA Volunteer (Wizards with Learning Assistance Association):} Attending, supporting and volunteering for the local chapter of the Wizards with Learning Assistance Association, helping fellow spellcasters with dyslexic incantations}
+   
+    \genericListItem{\medbold{Retired Beater:} Retired Quidditch beater trying to keep sharp on rainbow slopes in Unicorn Valley and Dragon Ridge}
+   
+    \genericListItem{\medbold{'Mystical Vibe' Coding:} Developed custom spells to track potions ingredient usage, track dragon migration patterns, and divine stock investments using a crystal ball}
+   
+  \listEnd
+\switchcolumn
+
+
+%==========RIGHT COLUMN==========
+\titleformat{\section}{\vspace{-4pt}\raggedright\large\bfseries\color{darkgray}}{}{0em}{}[\titlerule\vspace{-5pt}]
+
+
+%-----------PROFESSIONAL SUMMARY-----------
+\section{Professional Summary}
+
+
+\small\color{darkgray}{Senior Data Wizard with 100+ years of wizarding experience building magical data infrastructure at unicorn startups and dragon healthcare companies. Strong background in cross{-}dimensional collaboration, translating complex spell{-}casting insights into potion decisions and building foundational crystal ball infrastructure. Proven track record of delivering measurable enchantment impact: millions of gold coins in operational cost saved, 600M+ magical creatures catalogued, 15\% improvement in fortune{-}telling accuracy.}
+\sectionSpacing
+
+
+%-----------EXPERIENCE-----------
+\section{Professional Experience}
+
+
+\sectionSpacing
+
+
+%-----------ADDITIONAL EXPERIENCE-----------
+\section{Additional Professional Experience}
+
+
+\resumeSubheading
+  {Olivander's (Magic Wand Inc.)}
+  {November 1486 -- May 1693}
+  {Senior Data Wizard / Spell Engineer}
+  {Salem, MA}
+  \actionListStart
+  
+    
+      
+      
+      \actionListItem{Flagged, authored and implemented solution to deduplicate 600M magical creature contacts, reducing contact duplication rates by 50\%, significantly improving experience for millions of spell{-}sellers}
+    
+  
+    
+      
+      
+      \actionListItem{Provided ROI analysis and recommendations for the crystal ball collections feature enabling hundreds of millions of additional scrying addresses resulting in millions of gold coins in incremental marketing revenue for potion{-}sellers}
+    
+  
+    
+      
+      
+      \actionListItem{Engineered PII compliant ETL infrastructure resolving wizard identities between Spell App and Enchanted Rectangles datasets, unlocking billions of data points for 200+ data sorcerers and accelerating top down magical initiatives}
+    
+  
+    
+      
+      
+      \actionListItem{Led data migration of billions of spell{-}casting events for dozens of data wizards, establishing protocols that improved cross{-}team collaboration and reduced data wizard overhead and compute time by 30\%}
+    
+  
+    
+      
+      
+      \actionListItem{Trained an XGBoost familiar to label spam scrolls achieving 90\% precision on an extremely unbalanced dataset of ancient texts. The resulting magical guard rails and risk model improvements blocked thousands of cursed scrolls}
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+  \listEnd
+  \sectionSpacing
+
+\resumeSubheading
+  {Magical Bean Trading Co. (Beanstalk \& Sons)}
+  {September 1258 -- November 1486}
+  {Potions Stirrer / Enchanter}
+  {Munchen, Germany}
+  \actionListStart
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+      
+      \actionListItem{Improved healthcare potion forecasting accuracy by 15\% through advanced crystal engineering and novel elixir function development, directly contributing to a deal with a leading dragon insurance provider}
+    
+  
+    
+      
+      
+      \actionListItem{Developed and deployed deep learning familiars using TensorFlow for time{-}series prediction of patient magical ailment costs, processing millions of electronic health runes with complex temporal spell dependencies}
+    
+  
+    
+      
+      
+      \actionListItem{Modernized Spark cauldron ETL to process millions of FHIR{-}compliant patient runes from large, distributed crystal datasets, achieving 50\% improvement in processing speed and mana efficiency}
+    
+  
+    
+      
+      
+      \actionListItem{Created familiar experimentation framework using a Python spell, which accelerated development cycles and provided measurable performance metrics for the High Council}
+    
+  
+    
+  
+    
+  
+  \listEnd
+  \sectionSpacing
+
+\resumeSubheading
+  {Stieg \& Son's Lumber Company}
+  {September 1249 -- September 1254}
+  {Lumberjack}
+  {Munchen, Germany}
+  \actionListStart
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+      
+      \actionListItem{Discovered, planted and mentored magical beanstalk. As a result, we were able to steal 500+ pounds giant's gold and a golden goose for continue ROI}
+    
+  
+    
+      
+      
+      \actionListItem{Lumber acquisition and stock management, ensuring that local farmers and builders have sufficient supply to house and feed the settlement}
+    
+  
+  \listEnd
+  \sectionSpacing
+
+\sectionSpacing
+
+
+%----------END TWO-COLUMN LAYOUT----------
+\end{paracol}
+
+
+%----------FOOTER WITH SUBTLE BRANDING----------
+\vfill
+\begin{center}
+    \scriptsize\color{lightgray}
+    Resume generated with \LaTeX\ • Updated February 2025
+\end{center}
+\end{document}

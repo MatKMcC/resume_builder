@@ -7,11 +7,13 @@ It reads structured JSON data and renders it through LaTeX templates with advanc
 """
 
 import json
+import yaml
 import sys
 import subprocess
 import argparse
 from pathlib import Path
 import logging
+from typing import Dict, Any
 
 from jinja2 import Environment, FileSystemLoader, TemplateError
 from pylatex import utils as plutils
@@ -46,16 +48,24 @@ class Jinja2ResumeBuilder:
         """Escape special LaTeX characters"""
         return plutils.escape_latex(text)
     
-    def load_resume_data(self, json_path):
-        """Load resume data from JSON file"""
-        try:
-            with open(json_path, 'r', encoding='utf-8') as f:
+    def load_resume_data(self, file_path: Path) -> Dict[str, Any]:
+        """
+        Load resume data from JSON or YAML file.
+
+        Args:
+            file_path: Path to resume file
+
+        Returns:
+            Resume data dictionary
+        """
+
+        with open(file_path, 'r', encoding='utf-8') as f:
+            try:
+                self.resume_data = yaml.safe_load(f)
+            except yaml.YAMLError:
                 self.resume_data = json.load(f)
-            logger.info(f"✅ Loaded resume data from {json_path}")
-            return True
-        except Exception as e:
-            logger.error(f"✗ Error loading resume data: {e}")
-            return False
+
+        return self.resume_data
     
     def generate_latex(self, template_name):
         """Generate LaTeX content using Jinja2 template"""
@@ -128,7 +138,7 @@ class Jinja2ResumeBuilder:
 def main():
     parser = argparse.ArgumentParser(description='Generate resume PDF using Jinja2 LaTeX templates')
     parser.add_argument('--template', default='green_side_bar.tex', help='Template file to use')
-    parser.add_argument('--json', help='Resume JSON file')
+    parser.add_argument('--resume', help='Resume file')
     parser.add_argument('--output', help='Output LaTeX file')
     parser.add_argument('--pdf', help='Output PDF Directory')
     parser.add_argument('--no-compile', action='store_true', help='Skip PDF compilation')
@@ -136,20 +146,21 @@ def main():
     args = parser.parse_args()
     
     # Check if input files exist
-    if not Path(args.json).exists():
-        logger.error(f"✗ Resume JSON not found: {args.json}")
+    if not Path(args.resume).exists():
+        logger.error(f"✗ Resume JSON not found: {args.resume}")
         sys.exit(1)
-        
-    if not Path('templates', args.template).exists():
-        logger.error(f"✗ Template not found: {args.template}")
-        sys.exit(1)
+
+    # TODO: This should be updated to not check paths but jinja templates
+    # if not Path('templates', args.template).exists():
+    #     logger.error(f"✗ Template not found: {args.template}")
+    #     sys.exit(1)
     
     # Initialize builder
     builder = Jinja2ResumeBuilder()
     
     # Load resume data
-    logger.info(f"📖 Reading resume data: {args.json}")
-    if not builder.load_resume_data(args.json):
+    logger.info(f"📖 Reading resume data: {args.resume}")
+    if not builder.load_resume_data(args.resume):
         sys.exit(1)
     
     # Generate LaTeX
