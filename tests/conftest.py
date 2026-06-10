@@ -21,7 +21,7 @@ SCHEMA_DIR = Path(__file__).parent / "schemas"
 EXPECTED_OUTPUT_DIR = TEST_DATA_DIR / "expected_outputs"
 
 # Resume versions to test against
-RESUME_VERSIONS = ["0.0.0", "1.0.0"]
+RESUME_VERSIONS = ["0.0.0", "0.1.0", "1.0.0"]
 TEMPLATE_VERSIONS = ["green_side_bar", "classic"]
 
 
@@ -48,6 +48,12 @@ def schema_dir():
     return SCHEMA_DIR
 
 
+@pytest.fixture(params=RESUME_VERSIONS)
+def resume_version(request):
+    """Parametrized fixture that provides each resume version."""
+    return request.param
+
+
 @pytest.fixture
 def resume_schema(resume_version, schema_dir):
     """Load JSON schema for specified resume version."""
@@ -58,12 +64,6 @@ def resume_schema(resume_version, schema_dir):
 
     with open(schema_file, 'r') as f:
         return json.load(f)
-
-
-@pytest.fixture(params=RESUME_VERSIONS)
-def resume_version(request):
-    """Parametrized fixture that provides each resume version."""
-    return request.param
 
 
 @pytest.fixture

@@ -17,7 +17,7 @@
 \usepackage{titlesec}
 
 % For two-column layout
-\usepackage{paracol} 
+\usepackage{paracol}
 
 % For background colors and styling
 \usepackage{eso-pic}
@@ -80,9 +80,7 @@
 % \addtolength{\textwidth}{-.25in}
 % \addtolength{\topmargin}{-.7in}
 % \addtolength{\textheight}{1.4in}
-
 \urlstyle{same}
-
 
 % Ensure that generate pdf is machine readable/ATS parsable
 \pdfgentounicode=1
@@ -126,6 +124,7 @@
 
 
 %-------------------------
+
 % Custom commands - Enhanced with styling
 \newcommand{\medbold}[1]{{\fontseries{100}\selectfont #1}} % sb = SemiBold
 
@@ -186,24 +185,21 @@
 
 %----------BEGIN TWO-COLUMN LAYOUT----------
 \begin{paracol}{2}
-
 \leftPanelBackground{\leftPanelWidth}
 \titleformat{\section}{\vspace{-4pt}\raggedright\large\bfseries\color{leftpaneltext}}{}{0em}{}[\titlerule\vspace{-5pt}]
-
 % \setlength{\columnseprule}{1pt}  % Shows the column boundary
 
 
 %==========LEFT COLUMN==========
-
 % Name with enhanced styling
 \color{leftpaneltext}{\Huge\scshape\medbold{<< contact_info.name >>}} \\
 << professional_summary.tagline >>
-
 \sectionSpacing
 
 
 %-----------PERSONAL INFORMATION-----------
 \leftSection{Personal Information}
+
 % Contact information with icons and color - cleaned up layout
 \small 
 \contactItem{\faPhone}{<< contact_info.phone >>} \\
@@ -223,7 +219,6 @@
     \genericListItem{\medbold{Visualization:} << skills.technical.visualization|join(', ')|latex_escape >>}
     \genericListItem{\medbold{Frameworks:} << skills.technical.frameworks|join(', ')|latex_escape >>}
   \listEnd
-
 \sectionSpacing
 
 
@@ -233,10 +228,6 @@
    <% for achieve in achievements %>
     <% if achieve.key_achievement is defined %>
       <% set ns = namespace(key_achievement=achieve.key_achievement | latex_escape) %>
-      <% for highlight in achieve.highlights %>
-        <% set hl = highlight | latex_escape %>
-        <% set ns.key_achievement = ns.key_achievement | replace(hl, "\medbold{" + hl + "}") %>
-      <% endfor %>
       \genericListItem{ << ns.key_achievement >> }
      <% endif %>
    <% endfor %>
@@ -262,27 +253,20 @@
     \genericListItem{\medbold{<< hobby.title >>:} << hobby.summary >>}
    <% endfor %>
   \listEnd
-
 \switchcolumn
 
 
 %==========RIGHT COLUMN==========
-
 \titleformat{\section}{\vspace{-4pt}\raggedright\large\bfseries\color{darkgray}}{}{0em}{}[\titlerule\vspace{-5pt}]
 
 
 %-----------PROFESSIONAL SUMMARY-----------
 \section{Professional Summary}
-
 <# Updates Professional Summary information with highlights (note this requires exact match in JSON) #>
 <% set ps = namespace(summary=professional_summary.content | latex_escape) %>
-<% for highlight in professional_summary.highlights %>
-    <% set h = highlight | latex_escape %>
-    <% set ps.summary = ps.summary | replace(h, "\positiveBolding{" + h + "}") %>
-<% endfor %>
-
 \small\color{darkgray}{<< ps.summary >>}
 \sectionSpacing
+
 
 %-----------EXPERIENCE-----------
 \section{Professional Experience}
@@ -293,21 +277,12 @@
   {<< c.start_date >> -- << c.end_date >>}
   {<< c.title | latex_escape >>}
   {<< c.location | latex_escape >>}
-
   \actionListStart
-
   <% for a in achievements %>
     <% if c.company == a.company %>
-
       <% set content = a.content | latex_escape %>
       <% set ns = namespace(summary=content) %>
-      <% for highlight in a.highlights %>
-          <% set h = highlight | latex_escape %>
-          <% set ns.summary = ns.summary | replace(h, "\positiveBolding{" + h + "}") %>
-      <% endfor %>
-
       \actionListItem{<< ns.summary >>}
-
     <% endif %>
   <% endfor %>
   \listEnd
@@ -325,21 +300,12 @@
   {<< c.start_date >> -- << c.end_date >>}
   {<< c.title | latex_escape >>}
   {<< c.location >>}
-
   \actionListStart
-
   <% for a in achievements %>
     <% if c.company == a.company %>
-
       <% set content = a.content | latex_escape %>
       <% set ns = namespace(summary=content) %>
-      <% for highlight in a.highlights %>
-          <% set h = highlight | latex_escape %>
-          <% set ns.summary = ns.summary | replace(h, "\positiveBolding{" + h + "}") %>
-      <% endfor %>
-
       \actionListItem{<< ns.summary >>}
-
     <% endif %>
   <% endfor %>
   \listEnd
@@ -358,5 +324,4 @@
     \scriptsize\color{lightgray}
     Resume generated with \LaTeX\ • Updated February 2025
 \end{center}
-
 \end{document}
