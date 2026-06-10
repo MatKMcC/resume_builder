@@ -52,6 +52,6 @@ cat resume/resume_v0_0_0.json | jq '.contact_info'
 
 ## Links
 - **Resume Data:** [resume/resume.json](resume/resume.json)
-- **Main Builder:** [resume_builder.py](resume_builder.py)
-- **Templates:** [templates/](templates/)
+- **Main Builder:** [resume_builder.py](resume_builder/resume_builder.py)
+- **Templates:** [templates/](resume_builder/templates/)
 - **Tests:** [tests/](tests/)

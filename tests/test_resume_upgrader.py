@@ -3,12 +3,9 @@
 Tests for the Resume Upgrader Module
 """
 
-import json
-from unittest.mock import patch
 import pytest
-from pathlib import Path
 
-from resume_upgrader import ResumeUpgrader
+from resume_builder.resume_upgrader import ResumeUpgrader
 
 
 class TestResumeUpgrader:
