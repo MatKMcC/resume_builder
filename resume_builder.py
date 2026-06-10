@@ -7,11 +7,13 @@ It reads structured JSON data and renders it through LaTeX templates with advanc
 """
 
 import json
+import yaml
 import sys
 import subprocess
 import argparse
 from pathlib import Path
 import logging
+from typing import Dict, Any
 
 from jinja2 import Environment, FileSystemLoader, TemplateError
 from pylatex import utils as plutils
@@ -46,16 +48,22 @@ class Jinja2ResumeBuilder:
         """Escape special LaTeX characters"""
         return plutils.escape_latex(text)
     
-    def load_resume_data(self, json_path):
-        """Load resume data from JSON file"""
-        try:
-            with open(json_path, 'r', encoding='utf-8') as f:
-                self.resume_data = json.load(f)
-            logger.info(f"✅ Loaded resume data from {json_path}")
-            return True
-        except Exception as e:
-            logger.error(f"✗ Error loading resume data: {e}")
-            return False
+    def load_resume_data(self, file_path: Path) -> Dict[str, Any]:
+        """
+        Load resume data from JSON or YAML file.
+
+        Args:
+            file_path: Path to resume file
+
+        Returns:
+            Resume data dictionary
+        """
+
+        with open(file_path, 'r', encoding='utf-8') as f:
+            try:
+                return yaml.safe_load(f)
+            except yaml.YAMLError:
+                return json.load(f)
     
     def generate_latex(self, template_name):
         """Generate LaTeX content using Jinja2 template"""
