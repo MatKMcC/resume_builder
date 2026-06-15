@@ -8,3 +8,4 @@
 **/resume.aux
 **/resume.fdb_latexmk
 **/*.egg-info
+**/out

@@ -78,13 +78,11 @@ class Jinja2ResumeBuilder:
             return None
         
         try:
-            template = self.jinja_env.get_template(template_name)
-            
             # Render template
+            template = self.jinja_env.get_template(template_name)
             latex_content = template.render(**self.resume_data)
             logger.info("✅ Template rendered successfully")
             return latex_content
-            
         except TemplateError as e:
             logger.error(f"✗ Template error: {e}")
             return None
