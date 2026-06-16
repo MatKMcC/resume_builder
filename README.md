@@ -27,11 +27,8 @@ they can be easily modified and added to the resume library for future uses.
 
 ## Quick Start
 ```bash
-# Generate resume PDF
-python resume_builder.py resume/resume_v0_0_0.json
-
-# View current resume structure
-cat resume/resume_v0_0_0.json | jq '.contact_info'
+# Generate resume PDF from a resume.yaml file choosing the classic.tex template
+resume-builder --resume resume.yaml --template classic.tex --output resume.tex --pdf resume_pdf/
 ```
 
 ## Architecture
