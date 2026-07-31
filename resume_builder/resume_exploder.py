@@ -5,14 +5,14 @@ from typing import Any, Dict, List
 
 import yaml
 
-# resume_explode.py
+# resume_exploder.py
 #
 # Explodes a single resume.yaml into a directory tree (one file per item) plus
 # a _manifest.yaml that records ORDER + INCLUSION and carries the document-level
 # fields that never become their own files.
 #
 # The manifest is the strict source of truth for the inverse operation
-# (resume_implode.py). Contract goal: implode(explode(x)) == x
+# (resume_imploder.py). Contract goal: implode(explode(x)) == x
 
 # Document-level fields that are NOT part of any exploded section. They live
 # only in the manifest's `document` block so the round-trip stays lossless.
@@ -40,22 +40,22 @@ SECTION_ORDER = [
 
 
 class ResumeExploder():
-    def __init__(self, output_dir: Path = 'resume'):
-        self.resume_data: Dict[str, Any] = None
+    def __init__(self, resume_pth: str, output_dir: Path = 'resume'):
+        self.resume_data = self.load_resume_data(resume_pth)
         self.output_dir = Path(output_dir)
         # Manifest is assembled as sections are written, then dumped at the end.
-        self.manifest: Dict[str, Any] = {}
+        self.manifest: Dict[str, Any] = self.build_manifest()
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     # ------------------------------------------------------------------ helpers
     def _write_yaml(self, relative_path: str, data: Any) -> None:
         """Write `data` to a YAML file (relative to output_dir), creating dirs."""
-        full_path = self.output_dir / relative_path
+        full_path = self.output_dir / 'resume' / relative_path
         full_path.parent.mkdir(parents=True, exist_ok=True)
         with open(full_path, 'w', encoding='utf-8') as f:
             yaml.dump(data, f, sort_keys=False, allow_unicode=True)
 
-    def load_resume_data(self, file_path: Path) -> Dict[str, Any]:
+    def load_resume_data(self, file_path: str) -> Dict[str, Any]:
         """
         Load resume data from a YAML (or JSON) file.
 
@@ -141,8 +141,7 @@ class ResumeExploder():
         if 'contact_info' in data:
             manifest['contact_info'] = 'contact_info/contact_information.yaml'
         if 'professional_summary' in data:
-            manifest['professional_summary'] = \
-                'professional_summary/professional_summary.yaml'
+            manifest['professional_summary'] = 'professional_summary/professional_summary.yaml'
 
         # 4. companies -> ordered ids, each with its ordered achievement ids.
         if 'companies' in data:
@@ -177,8 +176,8 @@ class ResumeExploder():
         return manifest
 
     def write_manifest(self) -> None:
-        self.build_manifest()
-        self._write_yaml('_manifest.yaml', self.manifest)
+        with open(self.output_dir / 'manifest.yaml', 'w', encoding='utf-8') as f:
+            yaml.dump(self.manifest, f, sort_keys=False, allow_unicode=True)
 
     # ------------------------------------------------------------------ driver
     def explode(self) -> None:
@@ -200,8 +199,7 @@ def main():
                         help='Directory to write the exploded resume (default: resume)')
     args = parser.parse_args()
 
-    exploder = ResumeExploder(output_dir=args.output_dir)
-    exploder.load_resume_data(args.resume)
+    exploder = ResumeExploder(args.resume, output_dir=args.output_dir)
     exploder.explode()
     print(f"Exploded {args.resume} -> {args.output_dir}")
 
