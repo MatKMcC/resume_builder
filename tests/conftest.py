@@ -22,7 +22,7 @@ SCHEMA_DIR = Path(__file__).parent / "schemas"
 EXPECTED_OUTPUT_DIR = TEST_DATA_DIR / "expected_outputs"
 
 # Resume versions to test against
-RESUME_VERSIONS = ["0.0.0", "0.1.0", "1.0.0"]
+RESUME_VERSIONS = ["0.0.0", "0.1.0", "1.0.0", "1.1.0"]
 TEMPLATE_VERSIONS = ["green_side_bar"]
 
 # Markers for different test categories
@@ -92,6 +92,35 @@ def resume(resume_pth):
             return yaml.safe_load(f)
         except yaml.YAMLError:
             return json.load(f)
+
+@pytest.fixture
+def resume_dir(test_data_dir, resume_version):
+    """Load resume test data for a specified version."""
+    resume_version = resume_version.replace('.', '_')
+    resume_dir = test_data_dir / f"resume_v{resume_version}_dir"
+
+    if not resume_dir.exists():
+        pytest.skip(f"Resume directory for version {resume_dir} not found")
+
+    return resume_dir
+
+@pytest.fixture
+def manifest_pth(resume_dir):
+    """Load resume test data for a specified version."""
+    manifest_pth = resume_dir / f"manifest.yaml"
+
+    if not manifest_pth.exists():
+        pytest.skip(f"Manifest data for version {manifest_pth} not found")
+
+    return manifest_pth
+
+@pytest.fixture
+def manifest(manifest_pth):
+    """Load resume test data for a specified version."""
+    with open(manifest_pth, 'r', encoding='utf-8') as f:
+        return yaml.safe_load(f)
+
+
 
 # Custom reporting hooks for better test organization
 from collections import defaultdict

@@ -27,7 +27,8 @@ class TestResumeUpgrader:
         else:
 
             # reverse the resume chain
-            reverse_chain = {v:k for k, v in upgrader.upgrade_chain.items()}
+            l = upgrader.supported_versions
+            reverse_chain = {l[idx]:l[idx - 1] for idx in range(1, len(l))}
             prior_version = reverse_chain[resume['metadata']['version']]
 
             # load the prior resume in the test folder

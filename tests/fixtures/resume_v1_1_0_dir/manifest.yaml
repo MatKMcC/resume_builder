@@ -1,0 +1,52 @@
+document:
+  metadata:
+    version: 1.1.0
+    resume_id: test_user_main
+    variant: stable YAML format
+    created: '2026-06-09'
+    job_id: None
+    job_url: None
+    commit_id: None
+    format: yaml
+order:
+- contact_info
+- professional_summary
+- companies
+- achievements
+- education
+- hobbies
+- skills
+contact_info: contact_info/contact_information.yaml
+professional_summary: professional_summary/professional_summary.yaml
+companies:
+- id: olivanders
+  achievements:
+  - deduplicate_magical_creatures
+  - crystal_ball_collections_feature
+  - wizarding_infrastructure
+  - migrating_spell_casting_events
+  - predicting_spam_scrolls
+- id: magical_bean_trading
+  achievements:
+  - healthcare_potion_forecasting
+  - predicting_medical_ailment_cost
+  - processing_fire_ruins
+  - improved_metrics_for_high_council
+- id: stieg_and_sons
+  achievements:
+  - grew_magic_beanstalk
+  - lumber_stock_management
+education:
+  degrees:
+  - mage_of_dark_arts
+  certificates:
+  - mlops_certificate
+hobbies:
+- wlaa_volunteer
+- d1_beater
+- vibe_coding
+skills:
+- technical
+- soft
+- certifications
+- languages
