@@ -9,3 +9,4 @@
 **/resume.fdb_latexmk
 **/*.egg-info
 **/out
+.goosehints
