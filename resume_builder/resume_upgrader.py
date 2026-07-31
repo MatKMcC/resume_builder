@@ -23,11 +23,7 @@ class ResumeUpgrader:
     """Handles upgrading resume data between different schema versions."""
 
     def __init__(self):
-        self.supported_versions = ['0.0.0', '0.1.0', '1.0.0']
-        self.upgrade_chain = {
-            '0.0.0': '0.1.0',
-            '0.1.0': '1.0.0'
-        }
+        self.supported_versions = ['0.0.0', '0.1.0', '1.0.0', '1.1.0']
         self.upgrade_functions = {
             '0.0.0': self.upgrade_from_0_0_0_to_0_1_0,
             '0.1.0': self.upgrade_from_0_1_0_to_1_0_0

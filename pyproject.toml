@@ -17,6 +17,11 @@ dependencies = [
 [project.scripts]
 resume-builder = "resume_builder.resume_builder:main"
 resume-upgrader = "resume_builder.resume_upgrader:main"
+resume-exploder = "resume_builder.resume_exploder:main"
+resume-imploder = "resume_builder.resume_imploder:main"
+
+[tool.setuptools]
+py-modules = ["resume_builder"]
 
 [tool.setuptools.package-data]
 resume_builder = ["templates/*"]
