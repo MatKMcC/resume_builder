@@ -16,6 +16,38 @@
 - [ ] Friction analysis framework real job applications 📅 2026-04-03 #job-applications #user-research
 - [ ] Add test resume for learning / building experience
 
+### Resume Decomposition (explode/implode for clean git VC) — design DECIDED 2026-06-23
+- [ ] Build resume_decomposer module: explode resume.yaml -> directory tree #git #yaml
+  - [ ] explode(): yaml -> directory of one-file-per-item, ordering in _manifest.yaml
+  - [ ] implode(): directory tree -> resume.yaml (reciprocal, exact round-trip)
+  - [ ] Nest achievements under companies (option B); no duplicated company data
+  - [ ] slug helper: short human-identifiable summaries, collisions get -2/-3 suffix
+- [ ] Add CLI entry point(s) for explode/implode in pyproject.toml
+- [ ] Round-trip test: implode(explode(x)) == x using fixtures + real resume.yaml
+
+Decisions:
+- LAYOUT (Option B, nested, NO duplicated data):
+    resume/
+      _manifest.yaml              # metadata + ordering ONLY (strict source of truth)
+      contact_info.yaml           # single-object, whole
+      professional_summary.yaml   # single-object, whole
+      skills.yaml                 # whole (see note)
+      companies/<slug>/_company.yaml             # company fields only (no achievements)
+      companies/<slug>/achievements/<slug>.yaml  # one achievement per file
+      education/<slug>.yaml
+      hobbies/<slug>.yaml
+  Company identity lives ONLY in _company.yaml; achievements reference company via
+  parent dir -> zero duplication, no drift.
+- Slugs = short identifiable summaries (e.g. led-sms-workstream); collisions -> -2/-3.
+- Manifest is STRICT source of truth: implode includes ONLY manifest-listed items in
+  manifest order; unreferenced files on disk are ignored.
+- skills.yaml kept WHOLE for now. NOTE: skills change most structurally job-to-job;
+  likely future work = custom skill options driven by the manifest.
+- Round-trip contract: implode(explode(x)) == x exactly.
+
+### Drift fixes (resume content repo: /Users/rubicon/Development/resume)
+- [ ] Fix stale resume.json references -> resume.yaml in Makefile + README #cleanup
+
 ### Resume Compatibility
 - [ ] Functionality to update older resumes to new formats
 - [ ] Integrate resume into a UI
