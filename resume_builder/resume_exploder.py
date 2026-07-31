@@ -45,7 +45,6 @@ class ResumeExploder():
         self.output_dir = Path(output_dir)
         # Manifest is assembled as sections are written, then dumped at the end.
         self.manifest: Dict[str, Any] = self.build_manifest()
-        self.output_dir.mkdir(parents=True, exist_ok=True)
 
     # ------------------------------------------------------------------ helpers
     def _write_yaml(self, relative_path: str, data: Any) -> None:
