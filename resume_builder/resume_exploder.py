@@ -49,7 +49,7 @@ class ResumeExploder():
     # ------------------------------------------------------------------ helpers
     def _write_yaml(self, relative_path: str, data: Any) -> None:
         """Write `data` to a YAML file (relative to output_dir), creating dirs."""
-        full_path = self.output_dir / 'resume' / relative_path
+        full_path = self.output_dir / relative_path
         full_path.parent.mkdir(parents=True, exist_ok=True)
         with open(full_path, 'w', encoding='utf-8') as f:
             yaml.dump(data, f, sort_keys=False, allow_unicode=True)
@@ -175,7 +175,7 @@ class ResumeExploder():
         return manifest
 
     def write_manifest(self) -> None:
-        with open(self.output_dir / 'manifest.yaml', 'w', encoding='utf-8') as f:
+        with open('manifest.yaml', 'w', encoding='utf-8') as f:
             yaml.dump(self.manifest, f, sort_keys=False, allow_unicode=True)
 
     # ------------------------------------------------------------------ driver
