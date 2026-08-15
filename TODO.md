@@ -13,7 +13,7 @@
 - How will AI integrate with version controlled resumes provide helpful feedback?
 
 ### In Progress
-- [ ] Friction analysis framework real job applications 📅 2026-04-03 #job-applications #user-research
+- [ ] Friction analysis framework real job applications #job-applications #user-research 📅 2026-04-03
 - [ ] Add test resume for learning / building experience
 
 ### Drift fixes (resume content repo: /Users/rubicon/Development/resume)
@@ -22,7 +22,7 @@
 ### Resume Compatibility
 - [ ] Functionality to update older resumes to new formats
 - [ ] Integrate resume into a UI
-- [ ] Add resume versions control to resumes 📅 2026-04-03 #versioning 
+- [ ] Add resume version control test to resumes #versioning 📅 2026-04-03 ✅ 2026-08-06
 - [ ] Add Compatibility for educational details
 - [ ] Clarify resume metadata requirements and add test
 
