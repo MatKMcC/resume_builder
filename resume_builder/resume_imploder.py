@@ -23,7 +23,7 @@ import yaml
 class ResumeImploder:
     def __init__(self, resume_dir: str, manifest: str, output: str):
         self.resume_dir = Path(resume_dir)
-        self.manifest = self._load_yaml(self.resume_dir / manifest)
+        self.manifest = self._load_yaml(Path(manifest))
         self.output = Path(output)
 
     # ------------------------------------------------------------------ helpers
@@ -36,7 +36,7 @@ class ResumeImploder:
 
     def _load_attribute(self, relative_path: str) -> Any:
         """Load a YAML file relative to the resume directory."""
-        full_path = self.resume_dir / 'resume' / relative_path
+        full_path = self.resume_dir / relative_path
         return self._load_yaml(full_path)
 
     # ------------------------------------------------------------------ sections
@@ -161,7 +161,7 @@ class ResumeImploder:
     def write_resume(self) -> None:
         """Implode and write the reconstructed resume to a YAML file."""
         resume = self.implode()
-        output_path = self.resume_dir / self.output
+        output_path = self.output
         with open(output_path, 'w', encoding='utf-8') as f:
             yaml.dump(resume, f, sort_keys=False, allow_unicode=True)
 

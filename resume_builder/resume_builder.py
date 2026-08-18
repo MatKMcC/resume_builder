@@ -45,12 +45,17 @@ class Jinja2ResumeBuilder:
         
         # Register custom filters for LaTeX processing
         self.jinja_env.filters['latex_escape'] = self.latex_escape
+        self.jinja_env.filters['from_camelcase'] = self.from_camelcase
         
         self.resume_data = None
         
     def latex_escape(self, text):
         """Escape special LaTeX characters"""
         return plutils.escape_latex(text)
+
+    def from_camelcase(self, text):
+        """Convert camelCase to Capitalized Text"""
+        return text.replace('_', ' ').title()
     
     def load_resume_data(self, file_path: Path) -> Dict[str, Any]:
         """

@@ -211,13 +211,11 @@
 
 %-----------TECHNICAL SKILLS-----------
 \leftSection{Technical Skills}
+
   \listStart
-    \genericListItem{\medbold{Programming:} << skills.technical.programming|join(', ')|latex_escape >>}
-    \genericListItem{\medbold{Analytics Engineering:} << skills.technical.analytics_engineering|join(', ')|latex_escape >>}
-    \genericListItem{\medbold{Data Platform:} << skills.technical.data_platforms|join(', ')|latex_escape >>}
-    \genericListItem{\medbold{Experimentation:} << skills.technical.experimentation|join(', ')|latex_escape >>}
-    \genericListItem{\medbold{Visualization:} << skills.technical.visualization|join(', ')|latex_escape >>}
-    \genericListItem{\medbold{Frameworks:} << skills.technical.frameworks|join(', ')|latex_escape >>}
+   <% for skill in skills %>
+     \genericListItem{\medbold{<< skill | latex_escape | from_camelcase >>:}  << skills[skill] | join(', ') | latex_escape >> }
+   <% endfor %>
   \listEnd
 \sectionSpacing
 
@@ -279,7 +277,7 @@
   {<< c.location | latex_escape >>}
   \actionListStart
   <% for a in achievements %>
-    <% if c.company == a.company %>
+    <% if c.id == a.company_id %>
       <% set content = a.content | latex_escape %>
       <% set ns = namespace(summary=content) %>
       \actionListItem{<< ns.summary >>}
@@ -302,7 +300,7 @@
   {<< c.location >>}
   \actionListStart
   <% for a in achievements %>
-    <% if c.company == a.company %>
+    <% if c.id == a.company_id %>
       <% set content = a.content | latex_escape %>
       <% set ns = namespace(summary=content) %>
       \actionListItem{<< ns.summary >>}
