@@ -55,7 +55,7 @@ class Jinja2ResumeBuilder:
 
     def from_camelcase(self, text):
         """Convert camelCase to Capitalized Text"""
-        return text.replace('_', '').title()
+        return text.replace('_', ' ').title()
     
     def load_resume_data(self, file_path: Path) -> Dict[str, Any]:
         """
