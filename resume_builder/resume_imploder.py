@@ -2,6 +2,7 @@ import sys
 import argparse
 from pathlib import Path
 from typing import Dict, Any, List
+import glob
 
 import yaml
 
@@ -48,6 +49,41 @@ class ResumeImploder:
         rel = self.manifest['professional_summary']
         return self._load_attribute(rel)
 
+    def implode_key_achievements(self) -> List[Dict[str, Any]]:
+        """
+        Reconstruct the FLAT top-level `achievements` list.
+
+        In the source data achievements are a single flat list (each carrying a
+        `company_id`). On disk they are nested under each company. We walk the
+        manifest company-by-company, then achievement-by-achievement, preserving
+        order, and flatten them back out.
+        """
+        key_achievements = []
+        seen_ids = set()
+
+        # crawl achievements to get all achievement_ids -> content
+        files = [Path(f) for f in glob.glob("companies/*/achievements/*", root_dir=self.resume_dir)]
+        files = [(f.name.replace('.yaml', ''), f) for f in files]
+        achievements = {name: self._load_attribute(path) for name, path in files}
+        for achievement_id in self.manifest.get('key_achievements', []):
+            if achievement_id in achievements:
+                if achievement_id in seen_ids:
+                    # Duplicate id in the manifest -> the file was overwritten on
+                    # explode, so we cannot recover distinct records. Warn loudly.
+                    print(
+                        f"WARNING: duplicate achievement id '{achievement_id}' "
+                        f"(company '{achievements['company_id']}'). Only one file exists on disk; "
+                        "the round-trip is lossy for this item. Fix ids in source.",
+                        file=sys.stderr,)
+                seen_ids.add(achievement_id)
+                achievement = {
+                    'achievement_id': achievement_id,
+                    'company_id': achievements[achievement_id]['company_id'],
+                    'content': achievements[achievement_id]['key_achievement'],
+                }
+                key_achievements.append(achievement)
+        return key_achievements
+
     def implode_companies(self) -> List[Dict[str, Any]]:
         """Reconstruct the top-level `companies` list, in manifest order."""
         companies = []
@@ -81,9 +117,9 @@ class ResumeImploder:
                         "the round-trip is lossy for this item. Fix ids in source.",
                         file=sys.stderr,)
                 seen_ids.add(achievement_id)
-                achievement = self._load_attribute(
-                    f"companies/{company_id}/achievements/{achievement_id}.yaml"
-                )
+                achievement = self._load_attribute(f"companies/{company_id}/achievements/{achievement_id}.yaml")
+                if 'key_achievement' in achievement:
+                    achievement.pop('key_achievement')
                 achievements.append(achievement)
         return achievements
 
@@ -129,6 +165,7 @@ class ResumeImploder:
         section_builders = {
             'contact_info': self.implode_contact_info,
             'professional_summary': self.implode_professional_summary,
+            'key_achievements': self.implode_key_achievements,
             'companies': self.implode_companies,
             'achievements': self.implode_achievements,
             'education': self.implode_education,
@@ -171,7 +208,7 @@ def main():
         description='Implode an exploded resume directory back into a single resume.yaml'
     )
     parser.add_argument(
-        '--resume_dir',
+        '--resume-dir',
         default='resume',
         help='Directory containing the exploded resume',
     )

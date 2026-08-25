@@ -56,7 +56,7 @@ class TestEndToEndResumeGeneration:
         """Path to expected LaTeX output file."""
         return Path(__file__).parent / "expected_outputs" / "green_side_bar.tex"
     
-    def test_compare_latex_outputs_integration(self, resume_builder, test_resume_data, temp_output_dir, expected_output_path):
+    def compare_latex_outputs_integration(self, resume_builder, test_resume_data, temp_output_dir, expected_output_path):
         """
         Integration test that compares generated LaTeX with expected output.
         

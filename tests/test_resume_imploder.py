@@ -20,7 +20,6 @@ class TestResumeImploder:
         pass
 
     def test_implode_resume(self, imploder, resume):
-
         # load the resume
         imploded_resume = imploder.implode()
         assert imploded_resume == resume

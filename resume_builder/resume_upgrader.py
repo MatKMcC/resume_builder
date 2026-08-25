@@ -157,6 +157,60 @@ class ResumeUpgrader:
         logger.info(f"Successfully upgraded resume to version {upgraded_data['metadata']['version']} -- {upgraded_data['metadata']['variant']}")
         return upgraded_data
 
+    def upgrade_from_1_0_0_to_1_1_0(self, resume_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Upgrade resume from version 1.0.0 to 1.1.0.
+
+        Changes in 1.1.0:
+        -
+
+        Args:
+            resume_data: Resume data in version 1.0.0 format
+
+        Returns:
+            Resume data upgraded to version 1.1.0 format
+        """
+        logger.info("Upgrading resume from version 0.1.0 to 1.0.0 (YAML format)")
+
+        # Create a deep copy to avoid modifying the original
+        upgraded_data = copy.deepcopy(resume_data)
+
+        # Update version metadata to 1.0.0
+        upgraded_data = self.set_resume_version(upgraded_data, '1.0.0')
+        upgraded_data['metadata']['format'] = 'yaml'
+        upgraded_data['metadata']['variant'] = 'stable YAML format'
+        upgraded_data['metadata']['created'] = '2026-06-09'
+
+        logger.info(f"Successfully upgraded resume to version {upgraded_data['metadata']['version']} -- {upgraded_data['metadata']['variant']}")
+        return upgraded_data
+
+    def upgrade_from_1_1_0_to_1_2_0(self, resume_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Upgrade resume from version 0.1.0 to 1.0.0.
+
+        Changes in 1.0.0:
+        - Convert to YAML format
+
+        Args:
+            resume_data: Resume data in version 0.1.0 format
+
+        Returns:
+            Resume data upgraded to version 1.0.0 format
+        """
+        logger.info("Upgrading resume from version 0.1.0 to 1.0.0 (YAML format)")
+
+        # Create a deep copy to avoid modifying the original
+        upgraded_data = copy.deepcopy(resume_data)
+
+        # Update version metadata to 1.0.0
+        upgraded_data = self.set_resume_version(upgraded_data, '1.0.0')
+        upgraded_data['metadata']['format'] = 'yaml'
+        upgraded_data['metadata']['variant'] = 'stable YAML format'
+        upgraded_data['metadata']['created'] = '2026-06-09'
+
+        logger.info(f"Successfully upgraded resume to version {upgraded_data['metadata']['version']} -- {upgraded_data['metadata']['variant']}")
+        return upgraded_data
+
     def upgrade_resume(self, resume_data: Dict[str, Any], target_version: str = None) -> Dict[str, Any]:
         """
         Upgrade resume data to the target version or latest supported version.

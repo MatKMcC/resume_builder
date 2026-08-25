@@ -16,6 +16,14 @@
 - [ ] Friction analysis framework real job applications #job-applications #user-research 📅 2026-04-03
 - [ ] Add test resume for learning / building experience
 
+### Friction Analysis
+- [x] Port over template changes from Oura resume to `classic.tex`template #job-applications #user-research 📅 2026-08-19 ✅ 2026-08-24
+- [ ] Add new resume experience to pick from when completing a resume #job-applications #user-research 📅 2026-08-19
+- [ ] Find ways to get better advice on resume updates from Claude #job-applications #user-research 📅 2026-08-19
+- [ ] Add education details to templates to show relevant experience #job-applications #user-research 📅 2026-08-24
+- [ ] More consistent parameter flags between different package call for smoother iterations #job-applications #user-research 📅 2026-08-24
+- [ ] Resume-builder does not build clean environment with PDF  #job-applications #user-research 📅 2026-08-24
+
 ### Drift fixes (resume content repo: /Users/rubicon/Development/resume)
 - [ ] Fix stale resume.json references -> resume.yaml in Makefile + README #cleanup
 

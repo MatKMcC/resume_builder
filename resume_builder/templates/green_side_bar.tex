@@ -211,7 +211,6 @@
 
 %-----------TECHNICAL SKILLS-----------
 \leftSection{Technical Skills}
-
   \listStart
    <% for skill in skills %>
      \genericListItem{\medbold{<< skill | latex_escape | from_camelcase >>:}  << skills[skill] | join(', ') | latex_escape >> }
@@ -223,11 +222,8 @@
 %-----------KEY ACHIEVEMENTS-----------
 \leftSection{Key Achievements}
   \listStart
-   <% for achieve in achievements %>
-    <% if achieve.key_achievement is defined %>
-      <% set ns = namespace(key_achievement=achieve.key_achievement | latex_escape) %>
-      \genericListItem{ << ns.key_achievement >> }
-     <% endif %>
+   <% for achieve in key_achievements %>
+      \genericListItem{ << achieve.content | latex_escape >> }
    <% endfor %>
   \listEnd
 \sectionSpacing

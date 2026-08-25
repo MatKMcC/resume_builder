@@ -19,6 +19,7 @@ import yaml
 SECTION_KEYS = {
     'contact_info',
     'professional_summary',
+    'key_achievements',
     'companies',
     'achievements',
     'education',
@@ -31,6 +32,7 @@ SECTION_KEYS = {
 SECTION_ORDER = [
     'contact_info',
     'professional_summary',
+    'key_achievements',
     'companies',
     'achievements',
     'education',
@@ -92,12 +94,18 @@ class ResumeExploder():
                              self.resume_data['skills'][skillset])
 
     def setup_companies(self) -> None:
+
+        key_achievements = self.resume_data.get('key_achievements', [])
+        key_achievements = {achieve['achievement_id']: achieve['content'] for achieve in key_achievements}
+
         for company in self.resume_data.get('companies', []):
             company_id = company['id']
             self._write_yaml(
                 f"companies/{company_id}/company_info.yaml", company)
             for achievement in self.resume_data.get('achievements', []):
                 if achievement['company_id'] == company_id:
+                    if achievement['id'] in key_achievements:
+                        achievement['key_achievement'] = key_achievements[achievement['id']]
                     self._write_yaml(
                         f"companies/{company_id}/achievements/{achievement['id']}.yaml",
                         achievement)
@@ -128,21 +136,25 @@ class ResumeExploder():
         data = self.resume_data
         manifest: Dict[str, Any] = {}
 
-        # 1. Document-level fields: everything that is NOT a known section.
+        # Document-level fields: everything that is NOT a known section.
         document = {k: v for k, v in data.items() if k not in SECTION_KEYS}
         if document:
             manifest['document'] = document
 
-        # 2. Top-level section order (only sections actually present).
+        # Top-level section order (only sections actually present).
         manifest['order'] = [s for s in SECTION_ORDER if s in data]
 
-        # 3. Single-file sections map to their one file.
+        # Single-file sections map to their one file.
         if 'contact_info' in data:
             manifest['contact_info'] = 'contact_info/contact_information.yaml'
         if 'professional_summary' in data:
             manifest['professional_summary'] = 'professional_summary/professional_summary.yaml'
 
-        # 4. companies -> ordered ids, each with its ordered achievement ids.
+        # companies -> ordered ids, each with its ordered achievement ids.
+        if 'key_achievements' in data:
+            manifest['key_achievements'] = [el['achievement_id'] for el in data['key_achievements']]
+
+        # companies -> ordered ids, each with its ordered achievement ids.
         if 'companies' in data:
             manifest['companies'] = [
                 {
@@ -152,7 +164,7 @@ class ResumeExploder():
                 for company in data['companies']
             ]
 
-        # 5. education -> split by type, preserving source order within each.
+        # education -> split by type, preserving source order within each.
         if 'education' in data:
             manifest['education'] = {
                 'degrees': [
@@ -165,9 +177,10 @@ class ResumeExploder():
                 ],
             }
 
-        # 6. hobbies / skills -> ordered id / skillset-name lists.
+        # hobbies / skills -> ordered id / skillset-name lists.
         if 'hobbies' in data:
             manifest['hobbies'] = [h['id'] for h in data['hobbies']]
+
         if 'skills' in data:
             manifest['skills'] = list(data['skills'].keys())
 

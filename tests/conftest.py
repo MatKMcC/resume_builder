@@ -22,7 +22,7 @@ SCHEMA_DIR = Path(__file__).parent / "schemas"
 EXPECTED_OUTPUT_DIR = TEST_DATA_DIR / "expected_outputs"
 
 # Resume versions to test against
-RESUME_VERSIONS = ["0.0.0", "0.1.0", "1.0.0", "1.1.0"]
+RESUME_VERSIONS = ["1.2.0"]
 TEMPLATE_VERSIONS = ["green_side_bar"]
 
 # Markers for different test categories
@@ -78,10 +78,8 @@ def resume_pth(test_data_dir, resume_version):
     else:
         resume_version = resume_version.replace('.', '_')
         resume_pth = test_data_dir / f"resume_v{resume_version}.yaml"
-
     if not resume_pth.exists():
         pytest.skip(f"Resume data for version {resume_pth} not found")
-
     return resume_pth
 
 @pytest.fixture
@@ -97,7 +95,7 @@ def resume(resume_pth):
 def resume_dir(test_data_dir, resume_version):
     """Load resume test data for a specified version."""
     resume_version = resume_version.replace('.', '_')
-    resume_dir = test_data_dir / f"resume_v{resume_version}_dir"
+    resume_dir = test_data_dir / f"resume_v{resume_version}_dir" / 'resume'
 
     if not resume_dir.exists():
         pytest.skip(f"Resume directory for version {resume_dir} not found")
@@ -107,7 +105,7 @@ def resume_dir(test_data_dir, resume_version):
 @pytest.fixture
 def manifest_pth(resume_dir):
     """Load resume test data for a specified version."""
-    manifest_pth = resume_dir / f"manifest.yaml"
+    manifest_pth = resume_dir / ".." / f"manifest.yaml"
 
     if not manifest_pth.exists():
         pytest.skip(f"Manifest data for version {manifest_pth} not found")

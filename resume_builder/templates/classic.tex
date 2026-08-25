@@ -27,6 +27,7 @@
 \setlength{\multicolsep}{-3.0pt}
 \setlength{\columnsep}{-1pt}
 \input{glyphtounicode}
+\usepackage{changepage}
 
 %----------FONT OPTIONS----------
 \pagestyle{fancy}
@@ -81,18 +82,33 @@
 %-------------------------
 % Custom commands - Enhanced with styling
 
-% \newcommand{\resumeSubheadingItemListStart}{\begin{itemize}[leftmargin=0.25in, label={\textcolor{mediumgray}{\textopenbullet}}]}
+% spacing command
+\newcommand{\sectionSpacing}{\vspace{-9pt}}
+
+% Single source of truth for horizontal alignment of all text/bullets.
+% Every list indents by this amount on BOTH sides, and every tabular inside a
+% list is sized to \textwidth - 2*\resumeMargin so left AND right edges line up.
+\newlength{\resumeMargin}
+\setlength{\resumeMargin}{0.1in}
+% Gap between a bullet/label and its item text. Tables inside empty-label lists
+% must subtract this too so their right edge lines up with the bullets' text.
+\newlength{\resumeLabelSep}
+\setlength{\resumeLabelSep}{0.5em}
+% Vertical gap between bullets within a list. One knob to loosen/tighten.
+\newlength{\resumeItemSep}
+\setlength{\resumeItemSep}{3pt}
 
 % Generic Item Building Functions (with color support)
-\newcommand{\listStart}[1]{\begin{itemize}[leftmargin=0.15in, rightmargin=0.15in, label={#1}]}
-\newcommand{\listItem}[1]{\item{\color{darkgray}{#1} \vspace{-5pt} }} % Improved line spacing
+\newcommand{\listStart}[1]{\begin{itemize}[labelindent=\resumeMargin, labelsep=\resumeLabelSep, leftmargin=*, rightmargin=\resumeMargin, align=left, itemsep=\resumeItemSep, parsep=0pt, label={#1}]}
+\newcommand{\subListStart}[1]{\begin{itemize}[labelindent=-\resumeMargin, labelsep=\resumeLabelSep, leftmargin=*, rightmargin=\resumeMargin, align=left, itemsep=\resumeItemSep, parsep=0pt, label={#1}]}
+\newcommand{\listItem}[1]{\item{\color{darkgray}{#1}}}
 \newcommand{\listEnd}{\end{itemize}} \vspace{5pt}
 
 % Specific Item Building Functions with Enhanced Styling
 \newcommand{\resumeTechnicalSkillsListStart}{\listStart{\textcolor{successgreen}{\ding{51}}}}
 \newcommand{\resumeKeyAchievementsListStart}{\listStart{\textcolor{mediumgray}{\textbullet}}}
 \newcommand{\resumeSubHeadingListStart}{\listStart{}}
-\newcommand{\resumeSubheadingItemListStart}{\listStart{\textcolor{mediumgray}{\textopenbullet}}}
+\newcommand{\resumeSubheadingItemListStart}{\subListStart{\textcolor{mediumgray}{\textbullet}}}
 
 % Highlight text color
 \newcommand{\nuetralBolding}[1]{\textbf{\color{mediumgray}{#1}}}
@@ -103,24 +119,21 @@
 % Enhanced resume subheading with better typography and spacing
 \newcommand{\resumeSubheading}[4]{
   \vspace{-3pt} \item 
-    \begin{tabular*}{\dimexpr\textwidth-0.3in\relax}[t]{l@{\extracolsep{\fill}}r}
+    \hspace{-\resumeLabelSep}\begin{tabular*}{\dimexpr\textwidth-2\resumeMargin\relax}[t]{l@{\extracolsep{\fill}}r}
       \textbf{\color{accentblue}#1} & \color{mediumgray}#2 \\
       \color{mediumgray}#3 & \color{mediumgray}#4 \\
     \end{tabular*}
-  \vspace{-9pt}
+  \vspace{-3pt}
 }
 
 \newcommand{\educationItem}[4]{
-  {\dimexpr\textwidth-0.3in\relax}{\extracolsep{\fill}}
+  \vspace{-3pt} \item
+    \hspace{-\resumeLabelSep}\begin{tabular*}{\dimexpr\textwidth-2\resumeMargin\relax}[t]{l@{\extracolsep{\fill}}r}
       \textbf{\color{accentblue}#1} & \color{mediumgray}#2 \\
       \color{mediumgray}#3 & \color{mediumgray}#4 \\
+    \end{tabular*}
+  \vspace{-3pt}
 }
-
-% Add new subheading margins
-\newcommand{\resumeSubheadingMargins}{
-  \begin{itemize}[leftmargin=0.15in, rightmargin=0.15in, label={}]
-}
-
 
 % Custom command for enhanced contact info
 \newcommand{\contactItem}[2]{\textcolor{mediumgray}{#1} #2}
@@ -145,48 +158,36 @@
 
 % % Contact information with icons and color
 \normalsize
-\contactItem{\faPhone}{<< contact_info.phone >>} ~
+\contactItem{\faPhone}{\color{mediumgray} << contact_info.phone >>} ~
 \contactItem{\faEnvelope}{\href{mailto:<< contact_info.email >>}{<< contact_info.email >>}} ~ \\
 \contactItem{\faLinkedin}{\href{<< contact_info.linkedin >>}{<< contact_info.linkedin >>}} ~
 \contactItem{\faGithub}{\href{<< contact_info.github >>}{<< contact_info.github >>}}
 % \vspace{-3pt}
+
 %-----------PROFESSIONAL SUMMARY-----------
 \section{Professional Summary}
-  \resumeSubheadingMargins
-  \vspace{-5pt}
-    <# Updates Professional Summary information with highlights (note this requires exact match in JSON) #>
-    <% set ps = namespace(summary=professional_summary.content | latex_escape) %>
+  \begin{adjustwidth}{\resumeMargin}{\resumeMargin}
+      <% set ps = namespace(summary=professional_summary.content | latex_escape) %>
     \color{darkgray}{<< ps.summary >>}
-    % Job entries with modified margins
-  \listEnd
-  \vspace{-10pt}
+  \end{adjustwidth}
 \sectionSpacing
 
 %-----------TECHNICAL SKILLS-----------
-  \section{Skills}
-  \resumeSubheadingMargins
-  \vspace{-5pt}
-    \resumeSubHeadingListStart
+\section{Skills}
+  \resumeTechnicalSkillsListStart
      <% for skill in skills %>
        \listItem{\textbf{\color{mediumgray}<< skill | latex_escape | from_camelcase >>:}  << skills[skill] | join(', ') | latex_escape >> }
      <% endfor %>
-    \listEnd
   \listEnd
 \sectionSpacing
 
 %-----------KEY ACHIEVEMENTS-----------
 \section{Key Achievements}
-  \resumeSubheadingMargins
-  \vspace{-5pt}
-    \resumeKeyAchievementsListStart
-     <% for achieve in achievements %>
-       <% if achieve.key_achievement is defined %>
-         <% set ns = namespace(key_achievement=achieve.key_achievement | latex_escape) %>
-         \listItem{<< ns.key_achievement >>}
-       <% endif %>
+  \resumeKeyAchievementsListStart
+     <% for achieve in key_achievements %>
+       \listItem{\textbf{\color{mediumgray}<< achieve.content | latex_escape >>}}
      <% endfor %>
   \listEnd
- \listEnd
 \sectionSpacing
 
 %-----------EXPERIENCE-----------
@@ -212,7 +213,7 @@
   \listEnd
 \sectionSpacing
 
-%-----------ADDITIONAL EXPERIENCE-----------
+  %-----------ADDITIONAL EXPERIENCE-----------
 \section{Additional Professional Experience}
   \resumeSubHeadingListStart
     <% for c in companies if c.career != "Data Science" %>
@@ -232,22 +233,18 @@
         <% endfor %>
       \listEnd
     <% endfor %>
-    \listEnd
   \listEnd
 \sectionSpacing
 
 %-----------EDUCATION-----------
 \section{Education \& Certifications}
-  \resumeSubheadingMargins
-    \resumeSubHeadingListStart \\
-    \vspace{5pt} \\
-      <% for degree in education %>
-      \educationItem
-        { << degree.institution | latex_escape >> }
-        { << degree.year >> }
-        { << degree.degree | latex_escape >> }
-      <% endfor %>
-    \listEnd
+  \resumeSubHeadingListStart
+    <% for degree in education %>
+    \educationItem
+      { << degree.institution | latex_escape >> }
+      { << degree.year >> }
+      { << degree.degree | latex_escape >> }
+    <% endfor %>
   \listEnd
 \sectionSpacing
 
